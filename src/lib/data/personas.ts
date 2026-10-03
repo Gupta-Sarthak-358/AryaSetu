@@ -1,0 +1,77 @@
+import type { Persona } from "../types";
+
+export const personas: Persona[] = [
+  {
+    role: "Admin",
+    name: "Dr. Arvind Mehta",
+    designation: "Dean, Clinical Research",
+    org: "AIIA, New Delhi",
+    email: "admin@aryasetu.in",
+    studies: ["ALL"],
+    permissions: ["studies:read", "studies:write", "safety:read", "safety:write", "users:manage", "audit:read", "exports:generate", "config:write"],
+  },
+  {
+    role: "PI",
+    name: "Dr. Meera Kulkarni",
+    designation: "Principal Investigator",
+    org: "AIIA, New Delhi",
+    email: "pi@aryasetu.in",
+    studies: ["AYU-024", "AYU-036", "AYU-050"],
+    permissions: ["studies:read", "studies:write", "participants:write", "safety:write", "esign:apply", "exports:generate"],
+  },
+  {
+    role: "Coordinator",
+    name: "Sister Kavitha Nair",
+    designation: "Study Coordinator",
+    org: "AIIA, New Delhi",
+    email: "coordinator@aryasetu.in",
+    studies: ["AYU-024", "AYU-031", "AYU-050"],
+    permissions: ["studies:read", "participants:write", "visits:write", "consent:write", "queries:respond"],
+  },
+  {
+    role: "Monitor",
+    name: "Shri Rohan Deshpande",
+    designation: "Clinical Research Monitor",
+    org: "Sponsor Monitoring Cell",
+    email: "monitor@aryasetu.in",
+    studies: ["AYU-018", "AYU-024", "AYU-031", "AYU-036"],
+    permissions: ["studies:read", "sdv:write", "queries:raise", "deviations:write", "reports:read"],
+  },
+  {
+    role: "Ethics",
+    name: "Prof. (Dr.) Indira Rao",
+    designation: "Member Secretary, IEC",
+    org: "Institutional Ethics Committee, AIIA",
+    email: "ethics@aryasetu.in",
+    studies: ["ALL"],
+    permissions: ["studies:read", "ethics:write", "sae:review", "compensation:opinion", "consent:review"],
+  },
+  {
+    role: "Pharmacovigilance",
+    name: "Dr. Sameer Joshi",
+    designation: "PV Officer, NPvCC (ASU&H)",
+    org: "National Pharmacovigilance Coordination Centre",
+    email: "pv@aryasetu.in",
+    studies: ["ALL"],
+    permissions: ["safety:read", "safety:write", "sae:triage", "causality:assess", "signals:read", "npvcc:report"],
+  },
+  {
+    role: "Regulator",
+    name: "Shri D. K. Aggarwal",
+    designation: "Licensing Authority (Read-only)",
+    org: "Ministry of Ayush",
+    email: "regulator@aryasetu.in",
+    studies: ["ALL"],
+    permissions: ["studies:read", "safety:read", "audit:read", "exports:read"],
+  },
+];
+
+export const roleDescriptions: Record<string, string> = {
+  PI: "Trial conduct, e-signature, SAE reporting",
+  Coordinator: "Screening, enrolment, visits, consent",
+  Monitor: "SDV, queries, deviations, CAPA",
+  Ethics: "SAE review, compensation opinion, consent oversight",
+  Pharmacovigilance: "NPvCC triage, causality, signal detection",
+  Admin: "Portfolio command, users, configuration",
+  Regulator: "Read-only oversight across all studies",
+};

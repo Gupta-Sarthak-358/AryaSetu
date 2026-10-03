@@ -1,0 +1,185 @@
+import type { Batch } from "../types";
+
+export const batches: Batch[] = [
+  {
+    id: "B-1142",
+    product: "Guduchi Ghana Vati 500 mg",
+    formulation: "Aqueous extract concentrate of Tinospora cordifolia stem, tableted",
+    manufacturer: "AIIA GMP Pharmacy Unit, New Delhi",
+    mfgDate: "2026-03-14",
+    expDate: "2028-03-13",
+    assay: [
+      { marker: "Total bitters (as berberine eq.)", result: "2.1% w/w", spec: "≥ 2.0% w/w", pass: true },
+      { marker: "Moisture", result: "4.8%", spec: "≤ 6.0%", pass: true },
+      { marker: "Disintegration", result: "11 min", spec: "≤ 30 min", pass: true },
+      { marker: "Tinosporaside (HPLC)", result: "0.31% w/w", spec: "0.40–0.60% w/w", pass: false },
+    ],
+    heavyMetals: [
+      { metal: "Lead (Pb)", result: 4.1, limit: 10, unit: "ppm", pass: true },
+      { metal: "Mercury (Hg)", result: 0.3, limit: 1, unit: "ppm", pass: true },
+      { metal: "Arsenic (As)", result: 1.2, limit: 3, unit: "ppm", pass: true },
+      { metal: "Cadmium (Cd)", result: 0.1, limit: 0.3, unit: "ppm", pass: true },
+    ],
+    sitesShipped: [
+      { siteId: "SITE-01", qty: 1200, shipped: "2026-04-20" },
+      { siteId: "SITE-02", qty: 900, shipped: "2026-04-22" },
+      { siteId: "SITE-03", qty: 600, shipped: "2026-04-25" },
+    ],
+    participantsDosed: [
+      { participantId: "PT-036-0031", studyId: "AYU-036", siteId: "SITE-02", firstDose: "2026-05-11" },
+      { participantId: "PT-036-0074", studyId: "AYU-036", siteId: "SITE-01", firstDose: "2026-06-03" },
+      { participantId: "PT-036-0089", studyId: "AYU-036", siteId: "SITE-03", firstDose: "2026-06-21" },
+      { participantId: "PT-036-0102", studyId: "AYU-036", siteId: "SITE-03", firstDose: "2026-07-02" },
+      { participantId: "PT-036-0118", studyId: "AYU-036", siteId: "SITE-02", firstDose: "2026-07-26" },
+      { participantId: "PT-036-0125", studyId: "AYU-036", siteId: "SITE-01", firstDose: "2026-08-04" },
+    ],
+    linkedAes: ["AE-1029", "AE-1035", "AE-1041"],
+    status: "Under Review",
+    selfGeneratedAlcohol: null,
+  },
+  {
+    id: "B-1190",
+    product: "Naga Bhasma 125 mg capsules",
+    formulation: "Processed lead calx (Shodhana × 7, Marana × 3) per Rasa Tarangini",
+    manufacturer: "Licensed GMP Rasaushadhi Unit, Jamnagar",
+    mfgDate: "2025-10-02",
+    expDate: "2030-10-01",
+    assay: [
+      { marker: "Lead content (as PbO)", result: "68.4%", spec: "65–72%", pass: true },
+      { marker: "Particle size (Bhasma Pariksha)", result: "Passes Varitara & Rekhapurna", spec: "Classical tests", pass: true },
+      { marker: "Free metallic lead (XRD)", result: "Trace crystalline Pb detected", spec: "Absent", pass: false },
+    ],
+    heavyMetals: [
+      { metal: "Lead (Pb) — intended", result: 684000, limit: 720000, unit: "ppm", pass: true },
+      { metal: "Mercury (Hg)", result: 1.4, limit: 1, unit: "ppm", pass: false },
+      { metal: "Arsenic (As)", result: 2.8, limit: 3, unit: "ppm", pass: true },
+      { metal: "Cadmium (Cd)", result: 0.2, limit: 0.3, unit: "ppm", pass: true },
+    ],
+    sitesShipped: [
+      { siteId: "SITE-02", qty: 300, shipped: "2025-11-05" },
+      { siteId: "SITE-04", qty: 300, shipped: "2025-11-08" },
+    ],
+    participantsDosed: [
+      { participantId: "PT-019-0009", studyId: "AYU-019", siteId: "SITE-02", firstDose: "2025-11-21" },
+      { participantId: "PT-019-0021", studyId: "AYU-019", siteId: "SITE-04", firstDose: "2025-12-09" },
+      { participantId: "PT-019-0044", studyId: "AYU-019", siteId: "SITE-02", firstDose: "2026-02-14" },
+    ],
+    linkedAes: [],
+    status: "Quarantined",
+    selfGeneratedAlcohol: null,
+  },
+  {
+    id: "B-2118",
+    product: "Ashwagandha root extract 300 mg capsules",
+    formulation: "Standardized hydroalcoholic extract, ≥5% withanolides",
+    manufacturer: "AIIA GMP Pharmacy Unit, New Delhi",
+    mfgDate: "2026-01-20",
+    expDate: "2028-01-19",
+    assay: [
+      { marker: "Withanolides (HPLC)", result: "5.4% w/w", spec: "≥ 5.0% w/w", pass: true },
+      { marker: "Moisture", result: "3.9%", spec: "≤ 5.0%", pass: true },
+      { marker: "Microbial count", result: "Within limits", spec: "AYUSH/API", pass: true },
+    ],
+    heavyMetals: [
+      { metal: "Lead (Pb)", result: 2.2, limit: 10, unit: "ppm", pass: true },
+      { metal: "Mercury (Hg)", result: 0.1, limit: 1, unit: "ppm", pass: true },
+      { metal: "Arsenic (As)", result: 0.8, limit: 3, unit: "ppm", pass: true },
+      { metal: "Cadmium (Cd)", result: 0.05, limit: 0.3, unit: "ppm", pass: true },
+    ],
+    sitesShipped: [
+      { siteId: "SITE-01", qty: 2400, shipped: "2026-02-28" },
+      { siteId: "SITE-02", qty: 1800, shipped: "2026-03-01" },
+      { siteId: "SITE-04", qty: 1200, shipped: "2026-03-05" },
+    ],
+    participantsDosed: [
+      { participantId: "PT-024-0088", studyId: "AYU-024", siteId: "SITE-01", firstDose: "2026-05-19" },
+      { participantId: "PT-024-0112", studyId: "AYU-024", siteId: "SITE-02", firstDose: "2026-06-08" },
+    ],
+    linkedAes: ["AE-1011"],
+    status: "Released",
+    selfGeneratedAlcohol: null,
+  },
+  {
+    id: "B-3301",
+    product: "AYUSH-64 tablets 500 mg",
+    formulation: "Compound formulation (Saptaparna, Katuki, Kiratatikta, Guduchi) per CCRAS",
+    manufacturer: "IMPCL, Mohan (Govt. of India PSU)",
+    mfgDate: "2026-02-10",
+    expDate: "2028-02-09",
+    assay: [
+      { marker: "Uniformity of weight", result: "±3.1%", spec: "±5%", pass: true },
+      { marker: "Dissolution", result: "78% in 45 min", spec: "≥ 70%", pass: true },
+    ],
+    heavyMetals: [
+      { metal: "Lead (Pb)", result: 3.0, limit: 10, unit: "ppm", pass: true },
+      { metal: "Mercury (Hg)", result: 0.2, limit: 1, unit: "ppm", pass: true },
+      { metal: "Arsenic (As)", result: 1.0, limit: 3, unit: "ppm", pass: true },
+      { metal: "Cadmium (Cd)", result: 0.08, limit: 0.3, unit: "ppm", pass: true },
+    ],
+    sitesShipped: [
+      { siteId: "SITE-01", qty: 1500, shipped: "2026-03-20" },
+      { siteId: "SITE-05", qty: 900, shipped: "2026-03-24" },
+      { siteId: "SITE-06", qty: 600, shipped: "2026-03-28" },
+    ],
+    participantsDosed: [
+      { participantId: "PT-031-0177", studyId: "AYU-031", siteId: "SITE-05", firstDose: "2026-06-30" },
+    ],
+    linkedAes: ["AE-1018"],
+    status: "Released",
+    selfGeneratedAlcohol: null,
+  },
+  {
+    id: "B-4402",
+    product: "Shuddha Shilajit 250 mg capsules",
+    formulation: "Purified asphaltum (Suryatapi Shodhana), iron-content verified",
+    manufacturer: "AIIA GMP Pharmacy Unit, New Delhi",
+    mfgDate: "2026-05-18",
+    expDate: "2029-05-17",
+    assay: [
+      { marker: "Fulvic acid", result: "14.2%", spec: "≥ 12%", pass: true },
+      { marker: "Iron (Fe)", result: "3.1%", spec: "2.5–4.0%", pass: true },
+    ],
+    heavyMetals: [
+      { metal: "Lead (Pb)", result: 5.6, limit: 10, unit: "ppm", pass: true },
+      { metal: "Mercury (Hg)", result: 0.4, limit: 1, unit: "ppm", pass: true },
+      { metal: "Arsenic (As)", result: 2.1, limit: 3, unit: "ppm", pass: true },
+      { metal: "Cadmium (Cd)", result: 0.12, limit: 0.3, unit: "ppm", pass: true },
+    ],
+    sitesShipped: [{ siteId: "SITE-03", qty: 800, shipped: "2026-06-15" }],
+    participantsDosed: [
+      { participantId: "PT-042-0044", studyId: "AYU-042", siteId: "SITE-03", firstDose: "2026-08-11" },
+    ],
+    linkedAes: ["AE-0998"],
+    status: "Released",
+    selfGeneratedAlcohol: null,
+  },
+  {
+    id: "B-0712",
+    product: "Trivrit Avaleha (Virechana formulation)",
+    formulation: "Classical Avaleha — 55 herbs as decoction, 11 as powder, jaggery + honey base",
+    manufacturer: "SDM Ayurveda Pharmacy, Hassan",
+    mfgDate: "2025-08-22",
+    expDate: "2026-08-21",
+    assay: [
+      { marker: "Total sugars", result: "58%", spec: "50–65%", pass: true },
+      { marker: "Alcohol content (self-generated)", result: "7.2% v/v", spec: "5–10% v/v (classical range)", pass: true },
+    ],
+    heavyMetals: [
+      { metal: "Lead (Pb)", result: 1.8, limit: 10, unit: "ppm", pass: true },
+      { metal: "Mercury (Hg)", result: 0.1, limit: 1, unit: "ppm", pass: true },
+      { metal: "Arsenic (As)", result: 0.6, limit: 3, unit: "ppm", pass: true },
+      { metal: "Cadmium (Cd)", result: 0.04, limit: 0.3, unit: "ppm", pass: true },
+    ],
+    sitesShipped: [{ siteId: "SITE-05", qty: 400, shipped: "2025-09-01" }],
+    participantsDosed: [
+      { participantId: "PT-012-0108", studyId: "AYU-012", siteId: "SITE-05", firstDose: "2025-12-02" },
+    ],
+    linkedAes: ["AE-0961"],
+    status: "Released",
+    selfGeneratedAlcohol: "7.2% v/v — within classical range for fermented Avaleha",
+  },
+];
+
+export function batchById(id: string) {
+  return batches.find((b) => b.id === id);
+}
