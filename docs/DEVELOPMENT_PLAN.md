@@ -24,11 +24,15 @@ In progress on branch `stage-2-working`:
 - [x] Append-only SHA-256 audit store in DB + `/api/audit/verify` (recomputes full chain); tamper simulation still demoable on `/audit`
 - [x] SAE triage mutation API (`POST /api/safety/saes/[id]`, PV/PI only, audited)
 - [x] All app pages read from the database (force-dynamic); mock layer now serves only as seed source
+- [x] Login-gated app shell; real session user in Topbar; logout
+- [x] FHIR R4 API as `application/fhir+json` from DB — ResearchStudy, AdverseEvent (WHO-UMC/Naranjo/batch extensions), SAE Bundle
+- [x] Rule engine (`rules.ts`): SAE 24h clock, CTRI overdue, IEC expiry, batch hepatic cluster, aged queries — alerts computed, not seeded
+- [x] AE/SAE intake workflow: form → API → auto-computed NDCT deadline chain → audit (`POST /api/safety/events`)
+- [x] Query workflow: raise (Monitor) / resolve (PI-Coordinator), role-enforced + audited
+- [x] CSRF same-origin checks on mutations; Vitest suite (7 tests: FHIR builders, utils)
 - [ ] Migration to managed Postgres (Neon/RDS, India region) from PGlite
-- [ ] OIDC + MFA (replacing credential demo), CSRF tokens
-- [ ] Safety clock engine as a service (NDCT/CTRI/IEC rules with escalation)
-- [ ] FHIR R4 API endpoints (ResearchStudy, ResearchSubject, AdverseEvent, Consent, Medication)
-- [ ] Real SAE workflow UI: submit → route → e-sign → export CIOMS-I
+- [ ] OIDC + MFA (replacing credential demo), full CSRF token flow
+- [ ] CIOMS-I PDF export from SAE workspace
 - [ ] CTRI metadata seeding via official channel; site onboarding tooling
 
 ## Stage 3 — Submission exports & analytics

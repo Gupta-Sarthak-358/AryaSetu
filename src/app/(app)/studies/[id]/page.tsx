@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, Download, FileText, MapPin } from "lucide-re
 import { Badge, Card, CardTitle, ProgressBar, StatusAuto } from "@/components/ui";
 import { EnrollmentTrend, PrakritiDonut } from "@/components/charts";
 import { getAdverseEvents, getBatches, getDataQueries, getDeviations, getSites, getStudies, getStudy } from "@/lib/server/repo";
+import { QueryPanel } from "@/components/QueryPanel";
 import { fmtDate, pct } from "@/lib/utils";
 
 const stepState: Record<string, { dot: string; text: string }> = {
@@ -232,18 +233,7 @@ export default async function StudyDetailPage({ params }: { params: Promise<{ id
 
             <Card>
               <CardTitle title="Data queries" sub={`${studyQueries.filter((q) => q.status === "Open").length} open`} />
-              <div className="space-y-2">
-                {studyQueries.length === 0 && <p className="text-[11.5px] text-zinc-600">No queries for this study.</p>}
-                {studyQueries.map((q) => (
-                  <div key={q.id} className="flex items-start justify-between gap-2 rounded-[5px] border border-[#222226] bg-[#101012] p-3">
-                    <div>
-                      <p className="text-[12px] text-zinc-200">{q.field}</p>
-                      <p className="mt-0.5 font-mono2 text-[9.5px] text-zinc-600 uppercase">{q.id} · {q.ageDays}D OLD</p>
-                    </div>
-                    <StatusAuto status={q.status} />
-                  </div>
-                ))}
-              </div>
+              <QueryPanel studyId={study.id} siteId={study.sites[0]} queries={studyQueries} />
             </Card>
           </div>
 

@@ -53,6 +53,46 @@ export async function updateSae(id: string, patch: Partial<Sae>): Promise<Sae | 
   return next;
 }
 
+export async function createAe(ae: AdverseEvent): Promise<void> {
+  await (await db()).insert(schema.adverseEvents).values({ id: ae.id, studyId: ae.studyId, batchId: ae.batchId, seriousness: ae.seriousness, payload: ae });
+}
+
+export async function createSae(sae: Sae): Promise<void> {
+  await (await db()).insert(schema.saes).values({ id: sae.id, studyId: sae.studyId, status: sae.status, payload: sae });
+}
+
+export async function createQuery(q: DataQuery): Promise<void> {
+  await (await db()).insert(schema.dataQueries).values({ id: q.id, studyId: q.studyId, status: q.status, payload: q });
+}
+
+export async function updateQuery(id: string, patch: Partial<DataQuery>): Promise<DataQuery | undefined> {
+  const d = await db();
+  const rows = await d.select({ payload: schema.dataQueries.payload }).from(schema.dataQueries).where(eq(schema.dataQueries.id, id)).limit(1);
+  const current = rows[0]?.payload as DataQuery | undefined;
+  if (!current) return undefined;
+  const next = { ...current, ...patch };
+  await d.update(schema.dataQueries).set({ status: next.status, payload: next }).where(eq(schema.dataQueries.id, id));
+  return next;
+}
+
+export async function nextAeId(): Promise<string> {
+  const aes = await getAdverseEvents();
+  const max = Math.max(...aes.map((a) => parseInt(a.id.replace("AE-", ""), 10) || 0), 1000);
+  return `AE-${max + 1}`;
+}
+
+export async function nextSaeId(): Promise<string> {
+  const saes = await getSaes();
+  const max = Math.max(...saes.map((s) => parseInt(s.id.replace("SAE-2026-0", ""), 10) || 0), 0);
+  return `SAE-2026-0${max + 1}`;
+}
+
+export async function nextQueryId(): Promise<string> {
+  const qs = await getDataQueries();
+  const max = Math.max(...qs.map((q) => parseInt(q.id.replace("DQ-", ""), 10) || 0), 0);
+  return `DQ-${String(max + 1).padStart(4, "0")}`;
+}
+
 export async function getBatches(): Promise<Batch[]> {
   const rows = await (await db()).select({ payload: schema.batches.payload }).from(schema.batches).orderBy(schema.batches.id);
   return rows.map((r) => r.payload as Batch);

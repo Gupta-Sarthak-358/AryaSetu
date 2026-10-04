@@ -3,8 +3,9 @@ import { AlertTriangle, Clock3 } from "lucide-react";
 import { Badge, Card, CardTitle, PageHeader, Status, StatusAuto } from "@/components/ui";
 import { AeBars } from "@/components/charts";
 import { SafetyDisclaimer } from "@/components/SafetyDisclaimer";
+import { NewEventForm } from "@/components/NewEventForm";
 import { aeByWeek } from "@/lib/data/ops";
-import { getAdverseEvents, getSaes, getSites, getStudies } from "@/lib/server/repo";
+import { getAdverseEvents, getBatches, getSaes, getSites, getStudies } from "@/lib/server/repo";
 import { countdown, fmtDate } from "@/lib/utils";
 
 const rorRows = [
@@ -15,7 +16,7 @@ const rorRows = [
 ];
 
 export default async function SafetyPage() {
-  const [adverseEvents, saes, studies, sites] = await Promise.all([getAdverseEvents(), getSaes(), getStudies(), getSites()]);
+  const [adverseEvents, saes, studies, sites, batches] = await Promise.all([getAdverseEvents(), getSaes(), getStudies(), getSites(), getBatches()]);
   const safetySummary = {
     openSaes: saes.filter((s) => s.status === "Open").length,
     signalReview: 1,
@@ -36,6 +37,12 @@ export default async function SafetyPage() {
       />
 
       <SafetyDisclaimer />
+
+      <NewEventForm
+        studies={studies.map((s) => ({ id: s.id, shortTitle: s.shortTitle }))}
+        sites={sites.map((s) => ({ id: s.id, name: s.name, city: s.city }))}
+        batches={batches.map((b) => ({ id: b.id, product: b.product }))}
+      />
 
       <Link href={`/safety/${openSae.id}`}>
         <div className="panel relative overflow-hidden border-red-500/30 p-4 hover:border-red-500/50">

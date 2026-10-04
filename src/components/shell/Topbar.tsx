@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, ChevronDown, Search } from "lucide-react";
+import { Bell, ChevronDown, LogOut, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { usePersona, useRole } from "@/lib/role";
@@ -59,6 +59,11 @@ export function Topbar({ sessionName, sessionRole }: { sessionName?: string; ses
     setRole(r);
     setRoleOpen(false);
     router.refresh();
+  };
+
+  const logout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
+    router.push("/login");
   };
 
   return (
@@ -146,6 +151,14 @@ export function Topbar({ sessionName, sessionRole }: { sessionName?: string; ses
           </div>
         )}
       </div>
+
+      <button
+        onClick={logout}
+        title="Sign out"
+        className="flex h-8 w-8 items-center justify-center rounded-[5px] border border-[#2d2d33] bg-[#121214] text-zinc-500 hover:text-red-400"
+      >
+        <LogOut size={13} />
+      </button>
     </header>
   );
 }
