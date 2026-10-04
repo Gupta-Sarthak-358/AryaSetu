@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Activity, ArrowRight, ShieldCheck } from "lucide-react";
 import { personas, roleDescriptions } from "@/lib/data/personas";
@@ -10,10 +11,32 @@ import Link from "next/link";
 function LoginInner() {
   const router = useRouter();
   const { setRole } = useRole();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
 
-  const enter = (r: Role) => {
-    setRole(r);
-    router.push("/dashboard");
+  const doLogin = async (loginEmail: string, loginPassword: string, role: Role) => {
+    setBusy(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: loginEmail, password: loginPassword }),
+      });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        setError(d.error ?? "Login failed");
+        setBusy(false);
+        return;
+      }
+      setRole(role);
+      router.push("/dashboard");
+    } catch {
+      setError("Network error — is the server running?");
+      setBusy(false);
+    }
   };
 
   return (
@@ -29,22 +52,49 @@ function LoginInner() {
       </Link>
 
       <div className="w-full max-w-2xl">
-        <h1 className="text-[22px] font-semibold tracking-tight text-zinc-50">Select a demo persona</h1>
+        <h1 className="text-[22px] font-semibold tracking-tight text-zinc-50">Sign in</h1>
         <p className="mt-1.5 text-[12.5px] text-zinc-500">
-          Each role sees a different AryaSetu. Access is enforced per role and study membership —
-          switch any time from the topbar.
+          Real session authentication (Argon2id + HttpOnly cookie). Demo password for all personas: <code className="font-mono2 text-emerald-400">AryaSetu@123</code>
         </p>
 
-        <div className="mt-6 overflow-hidden rounded-md border border-[#222226]">
-          <div className="grid grid-cols-[1fr_auto] gap-x-4 border-b border-[#222226] bg-[#121214] px-4 py-2">
-            <span className="section-label">Persona · role</span>
-            <span className="section-label">Scope</span>
-          </div>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const p = personas.find((x) => x.email === email);
+            doLogin(email, password, p?.role ?? "Admin");
+          }}
+          className="mt-5 grid gap-2 rounded-md border border-[#222226] bg-[#121214] p-4 sm:grid-cols-[1fr_1fr_auto]"
+        >
+          <input
+            type="email"
+            required
+            placeholder="email — e.g. pv@aryasetu.in"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="rounded-[5px] border border-[#2d2d33] bg-[#0d0d0f] px-3 py-2 text-[12.5px] text-zinc-200 outline-none placeholder:text-zinc-600 focus:border-[#3f3f46]"
+          />
+          <input
+            type="password"
+            required
+            placeholder="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="rounded-[5px] border border-[#2d2d33] bg-[#0d0d0f] px-3 py-2 text-[12.5px] text-zinc-200 outline-none placeholder:text-zinc-600 focus:border-[#3f3f46]"
+          />
+          <button type="submit" disabled={busy} className="btn justify-center disabled:opacity-50">
+            {busy ? "Signing in…" : "Sign in"}
+          </button>
+        </form>
+        {error && <p className="mt-2 text-[12px] text-red-400">{error}</p>}
+
+        <p className="section-label mt-8 mb-3">Or pick a demo persona</p>
+        <div className="overflow-hidden rounded-md border border-[#222226]">
           {personas.map((p, i) => (
             <button
               key={p.role}
-              onClick={() => enter(p.role)}
-              className={`group grid w-full grid-cols-[1fr_auto] items-center gap-x-4 px-4 py-3 text-left transition-colors hover:bg-[#17171a] ${i > 0 ? "border-t border-[#1c1c20]" : ""} ${i % 2 === 0 ? "bg-[#101012]" : "bg-[#0d0d0f]"}`}
+              disabled={busy}
+              onClick={() => doLogin(p.email, "AryaSetu@123", p.role)}
+              className={`group grid w-full grid-cols-[1fr_auto] items-center gap-x-4 px-4 py-3 text-left transition-colors hover:bg-[#17171a] disabled:opacity-50 ${i > 0 ? "border-t border-[#1c1c20]" : ""} ${i % 2 === 0 ? "bg-[#101012]" : "bg-[#0d0d0f]"}`}
             >
               <span className="min-w-0">
                 <span className="flex flex-wrap items-center gap-2">
@@ -63,7 +113,7 @@ function LoginInner() {
 
         <div className="mt-8 flex items-center justify-center gap-2 font-mono2 text-[10px] tracking-wider text-zinc-600 uppercase">
           <ShieldCheck size={12} className="text-emerald-500" />
-          Demo access · synthetic data only · every action is audit-logged
+          Synthetic data only · every login is written to the audit chain
         </div>
       </div>
     </div>

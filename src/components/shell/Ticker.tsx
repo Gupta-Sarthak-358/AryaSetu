@@ -1,4 +1,4 @@
-import { tickerEvents } from "@/lib/data/ops";
+import { getTickerEvents } from "@/lib/server/repo";
 
 const kindColor: Record<string, string> = {
   safety: "text-red-400",
@@ -9,7 +9,8 @@ const kindColor: Record<string, string> = {
   visit: "text-zinc-500",
 };
 
-export function Ticker() {
+export async function Ticker() {
+  const tickerEvents = await getTickerEvents();
   const items = [...tickerEvents, ...tickerEvents];
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[#1c1c20] bg-[#0d0d0f]">

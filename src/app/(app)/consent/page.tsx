@@ -1,8 +1,9 @@
 import { Card, KpiTile, PageHeader, StatusAuto } from "@/components/ui";
-import { consentRecords } from "@/lib/data/ops";
+import { getConsentRecords } from "@/lib/server/repo";
 import { Lock, Languages, ShieldCheck, Video } from "lucide-react";
 
-export default function ConsentPage() {
+export default async function ConsentPage() {
+  const consentRecords = await getConsentRecords();
   const totalActive = consentRecords.reduce((a, c) => a + c.active, 0);
   const totalPending = consentRecords.reduce((a, c) => a + c.reconsentPending, 0);
   const totalAv = consentRecords.reduce((a, c) => a + c.avConsent, 0);

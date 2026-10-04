@@ -1,13 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CheckCircle2, ShieldCheck, XCircle } from "lucide-react";
 import { Badge, Card, PageHeader, Status } from "@/components/ui";
-import { auditChain } from "@/lib/data/ops";
 import { fmtDateTime } from "@/lib/utils";
+import type { AuditEntry } from "@/lib/types";
 
 export default function AuditPage() {
+  const [entries, setEntries] = useState<AuditEntry[]>([]);
+  const [verify, setVerify] = useState<{ valid: boolean; brokenAt: number | null; count: number } | null>(null);
   const [tampered, setTampered] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    Promise.all([
+      fetch("/api/audit").then((r) => (r.ok ? r.json() : Promise.reject(new Error(`${r.status}`)))),
+      fetch("/api/audit/verify").then((r) => (r.ok ? r.json() : Promise.reject(new Error(`${r.status}`)))),
+    ])
+      .then(([a, v]) => {
+        setEntries(a.entries);
+        setVerify(v);
+      })
+      .catch(() => setError("Sign in as Admin, Monitor, Ethics, PV or Regulator to read the audit chain."));
+  }, []);
+
+  const chainInvalid = tampered || (verify && !verify.valid);
 
   return (
     <div className="space-y-4">
@@ -25,30 +42,36 @@ export default function AuditPage() {
         }
       />
 
-      <div className={`panel flex flex-wrap items-center justify-between gap-4 p-4 ${tampered ? "border-red-500/35" : "border-emerald-500/25"}`}>
+      <div className={`panel flex flex-wrap items-center justify-between gap-4 p-4 ${chainInvalid ? "border-red-500/35" : "border-emerald-500/25"}`}>
         <div className="flex items-center gap-3">
-          {tampered ? <XCircle size={22} className="text-red-400" /> : <CheckCircle2 size={22} className="text-emerald-400" />}
+          {chainInvalid ? <XCircle size={22} className="text-red-400" /> : <CheckCircle2 size={22} className="text-emerald-400" />}
           <div>
-            <p className={`text-[14px] font-semibold ${tampered ? "text-red-400" : "text-emerald-300"}`}>
-              {tampered ? "AUDIT CHAIN: INVALID — break detected at record #7" : "AUDIT CHAIN: VERIFIED"}
+            <p className={`text-[14px] font-semibold ${chainInvalid ? "text-red-400" : "text-emerald-300"}`}>
+              {chainInvalid ? "AUDIT CHAIN: INVALID — break detected" : "AUDIT CHAIN: VERIFIED"}
             </p>
             <p className="mt-0.5 text-[11.5px] text-zinc-500">
               {tampered
                 ? "Record #7&rsquo;s stored hash no longer matches its recomputed content hash; every subsequent link is suspect."
-                : `${auditChain.length} of 2,418 demo records re-computed and linked · last verified 03 Oct 2026 15:00 IST`}
+                : verify
+                  ? `${verify.count} records re-computed and linked server-side (SHA-256) · verified just now`
+                  : error ?? "Verifying…"}
             </p>
           </div>
         </div>
-        <Status kind={tampered ? "crit" : "ok"} label={tampered ? "Tamper evident" : "SHA-256 style chain (demo)"} live />
+        <Status kind={chainInvalid ? "crit" : "ok"} label={chainInvalid ? "Tamper evident" : "SHA-256 chain · DB-backed"} live />
       </div>
+
+      {error && (
+        <div className="panel border-amber-500/25 p-3.5 text-[12px] text-amber-300">{error}</div>
+      )}
 
       <Card className="p-0">
         <div className="border-b border-[#222226] px-4 py-3">
           <h3 className="text-[13px] font-semibold text-zinc-100">Chain records</h3>
-          <p className="mt-0.5 text-[11px] text-zinc-500">Most recent 12 of 2,418 demo entries · each row links to the previous hash</p>
+          <p className="mt-0.5 text-[11px] text-zinc-500">{entries.length} entries · served from the database · each row links to the previous hash</p>
         </div>
         <div className="divide-y divide-[#1c1c20]">
-          {[...auditChain].reverse().map((e) => {
+          {[...entries].reverse().map((e) => {
             const isTampered = tampered && e.seq === 7;
             return (
               <div key={e.seq} className={`flex gap-4 px-4 py-3 ${isTampered ? "bg-red-500/[0.05]" : ""}`}>
@@ -82,9 +105,9 @@ export default function AuditPage() {
         <Card>
           <div className="mb-2 flex items-center gap-2"><ShieldCheck size={14} className="text-emerald-400" /><h3 className="text-[13px] font-semibold text-zinc-100">How the chain works</h3></div>
           <p className="text-[11.5px] leading-relaxed text-zinc-500">
-            Each record&rsquo;s hash is computed over its content plus the previous record&rsquo;s hash. Editing any historical
-            record breaks every link after it — detected by a single re-verification pass. Demo uses browser-side
-            hashing; production binds to HSM-backed keys.
+            Each record&rsquo;s SHA-256 is computed over its content plus the previous record&rsquo;s hash and stored in the
+            append-only audit_events table. Editing any historical record breaks every link after it — detected by a
+            single verification pass over the database.
           </p>
         </Card>
         <Card>
@@ -100,8 +123,8 @@ export default function AuditPage() {
         <Card>
           <h3 className="mb-2 text-[13px] font-semibold text-zinc-100">Honest scope</h3>
           <p className="text-[11.5px] leading-relaxed text-zinc-500">
-            This is application-level tamper evidence, not WORM storage, and not a 21 CFR Part 11 certification.
-            e-Signatures are hash-bound to record version; qualified e-signature integration is a Phase-2 item.
+            Application-level tamper evidence over a real database — not WORM storage, not a 21 CFR Part 11
+            certification. HSM-bound signing keys and object-lock storage are Phase-2/3 items.
           </p>
         </Card>
       </div>

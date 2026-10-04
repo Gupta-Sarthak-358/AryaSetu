@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { Badge, Card, CardTitle, KpiTile, PageHeader, Status, StatusAuto } from "@/components/ui";
-import { studies } from "@/lib/data/studies";
+import { getStudies } from "@/lib/server/repo";
 import { fmtDate } from "@/lib/utils";
 
-export default function RegulatoryPage() {
+export default async function RegulatoryPage() {
+  const studies = await getStudies();
   const overdue = studies.filter((s) => s.ctriStatus === "Update Due");
   const expiring = studies.filter((s) => new Date(s.iecExpiry) < new Date("2026-11-15"));
 

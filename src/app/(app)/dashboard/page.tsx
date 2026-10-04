@@ -2,8 +2,8 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Badge, Card, CardTitle, KpiTile, PageHeader, ProgressBar, Status, StatusAuto } from "@/components/ui";
 import { ChartTabs } from "@/components/ChartTabs";
-import { studies } from "@/lib/data/studies";
-import { alerts, auditChain, kpis, monitoringCompliance, myTasks } from "@/lib/data/ops";
+import { kpis, monitoringCompliance, myTasks } from "@/lib/data/ops";
+import { getAlerts, getAuditEntries, getStudies } from "@/lib/server/repo";
 import { countdown, fmtNum, pct } from "@/lib/utils";
 
 const sevKind: Record<string, "crit" | "warn" | "info"> = {
@@ -19,7 +19,8 @@ const prioKind: Record<string, "crit" | "warn" | "neutral"> = {
   low: "neutral",
 };
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const [studies, alerts, auditChain] = await Promise.all([getStudies(), getAlerts(), getAuditEntries()]);
   const cd = countdown("2026-10-03T21:12:00+05:30");
   return (
     <div className="space-y-4">

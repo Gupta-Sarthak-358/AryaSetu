@@ -1,9 +1,14 @@
 import Link from "next/link";
 import { Badge, Card, PageHeader, ProgressBar, StatusAuto } from "@/components/ui";
-import { studies, portfolioTotals } from "@/lib/data/studies";
+import { getStudies } from "@/lib/server/repo";
 import { fmtNum, pct } from "@/lib/utils";
 
-export default function StudiesPage() {
+export default async function StudiesPage() {
+  const studies = await getStudies();
+  const portfolioTotals = {
+    enrolled: studies.reduce((a, s) => a + s.enrolled, 0),
+    target: studies.reduce((a, s) => a + s.target, 0),
+  };
   return (
     <div className="space-y-4">
       <PageHeader

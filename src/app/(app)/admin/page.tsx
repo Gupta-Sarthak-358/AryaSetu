@@ -1,5 +1,5 @@
 import { Badge, Card, CardTitle, PageHeader, StatusAuto } from "@/components/ui";
-import { personas } from "@/lib/data/personas";
+import { getUsersWithStudies } from "@/lib/server/repo";
 import { KeyRound } from "lucide-react";
 
 const permissionMatrix: { area: string; perms: Record<string, boolean> }[] = [
@@ -18,7 +18,8 @@ const permissionMatrix: { area: string; perms: Record<string, boolean> }[] = [
 
 const roles = ["PI", "Coordinator", "Monitor", "Ethics", "Pharmacovigilance", "Admin", "Regulator"];
 
-export default function AdminPage() {
+export default async function AdminPage() {
+  const personas = await getUsersWithStudies();
   return (
     <div className="space-y-4">
       <PageHeader
@@ -42,7 +43,7 @@ export default function AdminPage() {
             </div>
             <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
               <Badge>{p.role.toUpperCase()}</Badge>
-              <Badge>{p.studies[0] === "ALL" ? "ALL 12 STUDIES" : `${p.studies.length} STUDIES`}</Badge>
+              <Badge>{p.studies.length >= 12 ? "ALL 12 STUDIES" : `${p.studies.length} STUDIES`}</Badge>
             </div>
             <p className="mt-2 text-[10px] text-zinc-600">{p.org} · {p.email}</p>
           </Card>

@@ -2,15 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Download, FileSignature, Scale } from "lucide-react";
 import { Badge, Card, CardTitle, Status, StatusAuto } from "@/components/ui";
-import { adverseEvents, saeById, saes } from "@/lib/data/safety";
-import { batchById } from "@/lib/data/batches";
-import { studyById } from "@/lib/data/studies";
-import { siteById } from "@/lib/data/sites";
+import { getAdverseEvents, getBatch, getSae, getSite, getStudy } from "@/lib/server/repo";
 import { countdown, fmtDateTime } from "@/lib/utils";
-
-export function generateStaticParams() {
-  return saes.map((s) => ({ id: s.id }));
-}
 
 const stepStyles: Record<string, { ring: string; text: string }> = {
   done: { ring: "bg-emerald-500", text: "text-zinc-300" },
@@ -21,13 +14,17 @@ const stepStyles: Record<string, { ring: string; text: string }> = {
 
 export default async function SaeDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const sae = saeById(id);
+  const sae = await getSae(id);
   if (!sae) notFound();
 
-  const study = studyById(sae.studyId)!;
-  const site = siteById(sae.siteId)!;
+  const [study, site, adverseEvents, batch] = await Promise.all([
+    getStudy(sae.studyId),
+    getSite(sae.siteId),
+    getAdverseEvents(),
+    sae.batchId ? getBatch(sae.batchId) : Promise.resolve(undefined),
+  ]);
+  if (!study || !site) notFound();
   const ae = adverseEvents.find((a) => a.id === sae.aeId);
-  const batch = sae.batchId ? batchById(sae.batchId) : null;
   const cd = countdown(sae.initialDueAt);
   const isOpen = sae.status === "Open";
 

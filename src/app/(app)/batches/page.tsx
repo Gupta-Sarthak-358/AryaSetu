@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { ArrowRight, FlaskConical, PackageCheck, TriangleAlert, Users } from "lucide-react";
 import { Badge, Card, CardTitle, PageHeader, Status, StatusAuto } from "@/components/ui";
-import { batches } from "@/lib/data/batches";
-import { adverseEvents } from "@/lib/data/safety";
-import { siteById } from "@/lib/data/sites";
+import { getAdverseEvents, getBatches, getSites } from "@/lib/server/repo";
 import { fmtDate } from "@/lib/utils";
 
-export default function BatchesPage() {
+export default async function BatchesPage() {
+  const [batches, adverseEvents, sites] = await Promise.all([getBatches(), getAdverseEvents(), getSites()]);
+  const siteById = (sid: string) => sites.find((s) => s.id === sid);
   const focus = batches.find((b) => b.id === "B-1142")!;
   const linkedAeDetails = adverseEvents.filter((a) => focus.linkedAes.includes(a.id));
 

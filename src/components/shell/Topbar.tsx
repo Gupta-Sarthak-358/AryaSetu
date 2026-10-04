@@ -1,14 +1,13 @@
 "use client";
 
 import { Bell, ChevronDown, Search } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { usePersona, useRole } from "@/lib/role";
 import { personas } from "@/lib/data/personas";
-import { alerts } from "@/lib/data/ops";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import type { Role } from "@/lib/types";
+import type { Alert, Role } from "@/lib/types";
 
 const crumbs: Record<string, string> = {
   dashboard: "Command Center",
@@ -33,9 +32,30 @@ export function Topbar() {
   const persona = usePersona();
   const [roleOpen, setRoleOpen] = useState(false);
   const [bellOpen, setBellOpen] = useState(false);
+  const [alerts, setAlerts] = useState<Alert[]>([]);
   const pathname = usePathname();
   const segs = pathname.split("/").filter(Boolean);
   const crit = alerts.filter((a) => a.severity === "critical").length;
+
+  useEffect(() => {
+    fetch("/api/alerts")
+      .then((r) => (r.ok ? r.json() : { alerts: [] }))
+      .then((d) => setAlerts(d.alerts ?? []))
+      .catch(() => setAlerts([]));
+  }, [role]);
+
+  const switchRole = async (r: Role) => {
+    const p = personas.find((x) => x.role === r);
+    if (p) {
+      await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: p.email, password: "AryaSetu@123" }),
+      }).catch(() => {});
+    }
+    setRole(r);
+    setRoleOpen(false);
+  };
 
   return (
     <header className="sticky top-0 z-30 flex items-center gap-4 border-b border-[#1c1c20] bg-[#0a0a0b]/92 px-5 py-2.5 backdrop-blur-sm">
@@ -109,7 +129,7 @@ export function Topbar() {
             {personas.map((p) => (
               <button
                 key={p.role}
-                onClick={() => { setRole(p.role as Role); setRoleOpen(false); }}
+                onClick={() => switchRole(p.role as Role)}
                 className={cn("flex w-full items-center gap-2.5 rounded-[5px] px-2 py-2 text-left hover:bg-[#1a1a1e]", p.role === role && "bg-[#1a1a1e]")}
               >
                 <span className={cn("h-[6px] w-[6px] shrink-0 rounded-full", p.role === role ? "bg-emerald-400" : "bg-zinc-700")} />

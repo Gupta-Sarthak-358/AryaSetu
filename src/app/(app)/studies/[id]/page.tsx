@@ -3,16 +3,8 @@ import { notFound } from "next/navigation";
 import { ChevronLeft, ChevronRight, Download, FileText, MapPin } from "lucide-react";
 import { Badge, Card, CardTitle, ProgressBar, StatusAuto } from "@/components/ui";
 import { EnrollmentTrend, PrakritiDonut } from "@/components/charts";
-import { studyById, studies } from "@/lib/data/studies";
-import { siteById } from "@/lib/data/sites";
-import { deviations, dataQueries } from "@/lib/data/quality";
-import { adverseEvents } from "@/lib/data/safety";
-import { batchById } from "@/lib/data/batches";
+import { getAdverseEvents, getBatches, getDataQueries, getDeviations, getSites, getStudies, getStudy } from "@/lib/server/repo";
 import { fmtDate, pct } from "@/lib/utils";
-
-export function generateStaticParams() {
-  return studies.map((s) => ({ id: s.id }));
-}
 
 const stepState: Record<string, { dot: string; text: string }> = {
   done: { dot: "bg-emerald-500", text: "text-zinc-300" },
@@ -33,9 +25,19 @@ const anchors = [
 
 export default async function StudyDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const study = studyById(id);
+  const [study, studies, sites, deviations, dataQueries, adverseEvents, batches] = await Promise.all([
+    getStudy(id),
+    getStudies(),
+    getSites(),
+    getDeviations(),
+    getDataQueries(),
+    getAdverseEvents(),
+    getBatches(),
+  ]);
   if (!study) notFound();
 
+  const siteById = (sid: string) => sites.find((s) => s.id === sid);
+  const batchById = (bid: string) => batches.find((b) => b.id === bid);
   const idx = studies.findIndex((s) => s.id === study.id);
   const prev = studies[idx - 1];
   const next = studies[idx + 1];

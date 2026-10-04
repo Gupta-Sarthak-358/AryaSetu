@@ -3,6 +3,8 @@ import { Sidebar } from "@/components/shell/Sidebar";
 import { Topbar } from "@/components/shell/Topbar";
 import { Ticker } from "@/components/shell/Ticker";
 
+export const dynamic = "force-dynamic";
+
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <RoleProvider>

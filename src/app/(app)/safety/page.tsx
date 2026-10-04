@@ -1,14 +1,10 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
 import { AlertTriangle, Clock3 } from "lucide-react";
 import { Badge, Card, CardTitle, PageHeader, Status, StatusAuto } from "@/components/ui";
 import { AeBars } from "@/components/charts";
-import { adverseEvents, saes, safetySummary } from "@/lib/data/safety";
+import { SafetyDisclaimer } from "@/components/SafetyDisclaimer";
 import { aeByWeek } from "@/lib/data/ops";
-import { studyById } from "@/lib/data/studies";
-import { siteById } from "@/lib/data/sites";
+import { getAdverseEvents, getSaes, getSites, getStudies } from "@/lib/server/repo";
 import { countdown, fmtDate } from "@/lib/utils";
 
 const rorRows = [
@@ -18,10 +14,17 @@ const rorRows = [
   { product: "Shuddha Shilajit", event: "Constipation", n: 1, expected: 1.6, ror: 0.6, signal: false },
 ];
 
-export default function SafetyPage() {
-  const [disclaimer, setDisclaimer] = useState(true);
+export default async function SafetyPage() {
+  const [adverseEvents, saes, studies, sites] = await Promise.all([getAdverseEvents(), getSaes(), getStudies(), getSites()]);
+  const safetySummary = {
+    openSaes: saes.filter((s) => s.status === "Open").length,
+    signalReview: 1,
+    medianReportHours: 7.5,
+  };
   const openSae = saes.find((s) => s.status === "Open")!;
   const cd = countdown(openSae.initialDueAt);
+  const studyById = (sid: string) => studies.find((s) => s.id === sid);
+  const siteById = (sid: string) => sites.find((s) => s.id === sid);
 
   return (
     <div className="space-y-4">
@@ -32,21 +35,7 @@ export default function SafetyPage() {
         right={<div className="flex gap-3"><Status kind="crit" label={`${safetySummary.openSaes} open SAE`} live /><Status kind="warn" label={`${safetySummary.signalReview} signal under review`} /></div>}
       />
 
-      {disclaimer && (
-        <div className="panel-2 flex items-start gap-3 border-amber-500/25 p-3.5">
-          <AlertTriangle size={15} className="mt-0.5 shrink-0 text-amber-400" />
-          <div className="flex-1">
-            <p className="text-[12px] font-semibold text-amber-300">Limitations of spontaneous safety data</p>
-            <p className="mt-1 text-[11.5px] leading-relaxed text-zinc-500">
-              A report of an event does not establish causation. Data may contain duplicates or incomplete
-              reports and cannot be used to estimate incidence rates. Causality shown here is assessed
-              case-by-case (WHO-UMC / Naranjo), not inferred from counts. Dictionaries are demonstration
-              versions, not licensed MedDRA/WHODrug.
-            </p>
-          </div>
-          <button onClick={() => setDisclaimer(false)} className="btn-outline shrink-0 !py-1 text-[11px]">Acknowledge</button>
-        </div>
-      )}
+      <SafetyDisclaimer />
 
       <Link href={`/safety/${openSae.id}`}>
         <div className="panel relative overflow-hidden border-red-500/30 p-4 hover:border-red-500/50">
