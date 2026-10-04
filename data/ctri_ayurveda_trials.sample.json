@@ -1,0 +1,29 @@
+{
+  "_comment": "Deliverable format for the CTRI scrape task. Array of these objects, file name: ctri_ayurveda_trials.json placed in this folder. Only public registry fields — no participant data.",
+  "records": [
+    {
+      "ctriNumber": "CTRI/2024/03/064321",
+      "title": "Evaluation of efficacy of Ashwagandha Churna in the management of generalized anxiety disorder — a randomized controlled trial",
+      "intervention": "Ashwagandha Churna 3 g BD with water",
+      "phase": "Phase III",
+      "sponsor": "All India Institute of Ayurveda, New Delhi",
+      "pi": "Dr. Example Investigator",
+      "city": "New Delhi",
+      "registrationDate": "2024-03-12",
+      "status": "Recruiting",
+      "targetSampleSize": 120
+    },
+    {
+      "ctriNumber": "CTRI/2023/11/059874",
+      "title": "Clinical evaluation of Triphala Rasayana in elderly individuals with mild cognitive impairment",
+      "intervention": "Triphala Rasayana 10 g OD",
+      "phase": "Phase II",
+      "sponsor": "CCRAS, Ministry of Ayush",
+      "pi": "Dr. Sample Researcher",
+      "city": "Jamnagar",
+      "registrationDate": "2023-11-02",
+      "status": "Completed",
+      "targetSampleSize": 80
+    }
+  ]
+}
