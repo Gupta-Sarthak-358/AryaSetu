@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { PGlite } from "@electric-sql/pglite";
 import { drizzle as drizzlePglite, type PgliteDatabase } from "drizzle-orm/pglite";
 import { neon } from "@neondatabase/serverless";

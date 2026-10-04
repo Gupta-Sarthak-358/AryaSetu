@@ -12,9 +12,12 @@
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.8",
+    "@neon/config": "^1.8.3",
+    "@neon/env": "^1.5.0",
     "@neondatabase/serverless": "^1.2.0",
     "argon2": "^0.45.1",
     "clsx": "^2.1.1",
+    "dotenv": "^18.0.5",
     "drizzle-orm": "^0.45.3",
     "framer-motion": "^14.0.0",
     "jspdf": "^4.2.1",
