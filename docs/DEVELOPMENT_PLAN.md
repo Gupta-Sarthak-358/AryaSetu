@@ -30,9 +30,11 @@ In progress on branch `stage-2-working`:
 - [x] AE/SAE intake workflow: form → API → auto-computed NDCT deadline chain → audit (`POST /api/safety/events`)
 - [x] Query workflow: raise (Monitor) / resolve (PI-Coordinator), role-enforced + audited
 - [x] CSRF same-origin checks on mutations; Vitest suite (7 tests: FHIR builders, utils)
+- [x] CIOMS-I PDF export (`GET /api/safety/saes/[id]/cioms`, audited) + FHIR bundle download on SAE page
+- [x] Deviation report workflow (`POST /api/studies/[id]/deviations`, Monitor/PI/Coordinator, audited)
+- [x] DB-backed test suite: tamper detection (direct DB edit → chain INVALID at exact record), rule-engine, boot/seed — 11/11 passing
 - [ ] Migration to managed Postgres (Neon/RDS, India region) from PGlite
 - [ ] OIDC + MFA (replacing credential demo), full CSRF token flow
-- [ ] CIOMS-I PDF export from SAE workspace
 - [ ] CTRI metadata seeding via official channel; site onboarding tooling
 
 ## Stage 3 — Submission exports & analytics
