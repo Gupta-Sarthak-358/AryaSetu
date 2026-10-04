@@ -1,4 +1,4 @@
-import { getDb } from "./db";
+import { getDb, execDdl } from "./db";
 import * as schema from "./schema";
 import { studies as mockStudies } from "../data/studies";
 import { sites as mockSites } from "../data/sites";
@@ -114,8 +114,7 @@ export function ensureBoot(): Promise<void> {
 
 async function boot() {
   const db = getDb();
-  const client = (db as unknown as { $client: { exec: (sql: string) => Promise<unknown> } }).$client;
-  await client.exec(DDL);
+  await execDdl(DDL);
 
   const existing = await db.select({ id: schema.users.id }).from(schema.users).limit(1);
   if (existing.length > 0) return;
