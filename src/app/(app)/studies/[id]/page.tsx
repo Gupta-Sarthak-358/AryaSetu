@@ -6,6 +6,9 @@ import { EnrollmentTrend, PrakritiDonut } from "@/components/charts";
 import { getAdverseEvents, getBatches, getDataQueries, getDeviations, getSites, getStudies, getStudy } from "@/lib/server/repo";
 import { QueryPanel } from "@/components/QueryPanel";
 import { DeviationPanel } from "@/components/DeviationPanel";
+import { cohensKappa } from "@/lib/kappa";
+import { getAssessments } from "@/lib/data/assessments";
+import { namasteFor } from "@/lib/data/namaste";
 import { fmtDate, pct } from "@/lib/utils";
 
 const stepState: Record<string, { dot: string; text: string }> = {
@@ -79,6 +82,17 @@ export default async function StudyDetailPage({ params }: { params: Promise<{ id
         <p className="mt-1.5 text-[12px] text-zinc-500">
           {study.design} · {study.intervention} · PI: {study.pi} · Sponsor: {study.sponsor}
         </p>
+        {(() => {
+          const m = namasteFor(study.indication);
+          return m ? (
+            <p className="mt-1 flex flex-wrap items-center gap-2 text-[10.5px]">
+              <span className="text-zinc-600">Indication dual-coded (draft):</span>
+              <span className="rounded-[3px] border border-[#2d2d33] px-1.5 py-px font-mono2 text-emerald-400">NAMASTE {m.namasteCode}</span>
+              <span className="rounded-[3px] border border-[#2d2d33] px-1.5 py-px font-mono2 text-sky-400">ICD-11 {m.tm2Code}</span>
+              <span className="text-zinc-600">({m.sanskrit})</span>
+            </p>
+          ) : null;
+        })()}
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[190px_1fr]">
@@ -134,6 +148,25 @@ export default async function StudyDetailPage({ params }: { params: Promise<{ id
                   </div>
                 ))}
               </div>
+              {(() => {
+                const { assessorA, assessorB, rows } = getAssessments(study.id);
+                const k = cohensKappa(rows.map((r) => ({ a: r.ratingA, b: r.ratingB })));
+                const agree = rows.filter((r) => r.ratingA === r.ratingB).length;
+                return (
+                  <div className="mt-4 border-t border-[#1c1c20] pt-3">
+                    <div className="flex items-center justify-between">
+                      <p className="section-label">Inter-rater reliability</p>
+                      <Badge>κ = {k.toFixed(2)}</Badge>
+                    </div>
+                    <p className="mt-2 text-[11px] leading-relaxed text-zinc-500">
+                      {assessorA} vs {assessorB} — {agree}/{rows.length} agreements.
+                      {k < 0.4
+                        ? " Below the 0.40 threshold — assessor calibration retraining triggered (published Prakriti κ ≈ 0.20–0.40)."
+                        : " Within acceptable range for Prakriti assessment (published κ ≈ 0.20–0.40)."}
+                    </p>
+                  </div>
+                );
+              })()}
             </Card>
           </div>
 

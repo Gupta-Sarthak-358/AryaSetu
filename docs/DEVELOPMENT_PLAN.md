@@ -39,11 +39,18 @@ In progress on branch `stage-2-working`:
 
 ## Stage 3 — Submission exports & analytics
 
-- [ ] SDTM/ADaM export service (.xpt) + Define-XML 2.1 generation; CDASH instrument library + ODM
+In progress on branch `stage-2-working`:
+
+- [x] SDTM export service from DB — DM (with PRAKRITI), AE (with BATCHID), EX (batch lots) as CSV downloads, audited (`/api/export/sdtm/[domain]`)
+- [x] ADaM ADSL export (`/api/export/adam/adsl`); Define-XML 2.1 + ODM 1.3.2 CDASH drafts (`/api/export/metadata/[kind]`)
+- [x] Signal analytics: ROR + PRR + χ² computed live from the AE table (EVDAS-style, replaces static table)
+- [x] Prakriti inter-rater reliability QA — paired assessor dataset with live Cohen's κ per study (calibration threshold 0.40)
+- [x] NAMASTE ↔ ICD-11 TM2 draft dual-coding (10 indications, clearly labelled draft, shown on study records)
+- [x] 19/19 tests (kappa, signal stats, export builders, FHIR, DB, utils)
+- [ ] True .xpt (SAS transport) writer for SDTM/ADaM (CSV now; .xpt needs binary writer)
 - [ ] EDC/HIS connectors; ABDM HIP/HIU adapters in sandbox
-- [ ] Signal analytics beyond ROR (exposure denominators, temporal patterns)
-- [ ] NAMASTE ↔ ICD-11 TM2 dual coding for AE terms (draft Ayush-CT IG → pilot)
-- [ ] Prakriti inter-rater reliability QA; individualization-aware protocol logic (N-of-1/adaptive designs)
+- [ ] Exposure-denominator signal analytics (person-time), temporal patterns
+- [ ] Individualization-aware protocol logic (N-of-1/adaptive designs)
 - [ ] Evaluation scorecard: injected-anomaly tests for KPI accuracy, audit completeness, RBAC denial rate
 
 ## Rules of the plan

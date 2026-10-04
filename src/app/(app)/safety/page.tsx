@@ -6,17 +6,11 @@ import { SafetyDisclaimer } from "@/components/SafetyDisclaimer";
 import { NewEventForm } from "@/components/NewEventForm";
 import { aeByWeek } from "@/lib/data/ops";
 import { getAdverseEvents, getBatches, getSaes, getSites, getStudies } from "@/lib/server/repo";
+import { computeSignalRows } from "@/lib/server/signal";
 import { countdown, fmtDate } from "@/lib/utils";
 
-const rorRows = [
-  { product: "Guduchi Ghana Vati (B-1142)", event: "Hepatic enzyme increased", n: 3, expected: 0.4, ror: 7.5, signal: true },
-  { product: "Withania somnifera", event: "Somnolence", n: 1, expected: 0.9, ror: 1.1, signal: false },
-  { product: "AYUSH-64", event: "Gastritis", n: 1, expected: 1.2, ror: 0.8, signal: false },
-  { product: "Shuddha Shilajit", event: "Constipation", n: 1, expected: 1.6, ror: 0.6, signal: false },
-];
-
 export default async function SafetyPage() {
-  const [adverseEvents, saes, studies, sites, batches] = await Promise.all([getAdverseEvents(), getSaes(), getStudies(), getSites(), getBatches()]);
+  const [adverseEvents, saes, studies, sites, batches, rorRows] = await Promise.all([getAdverseEvents(), getSaes(), getStudies(), getSites(), getBatches(), computeSignalRows()]);
   const safetySummary = {
     openSaes: saes.filter((s) => s.status === "Open").length,
     signalReview: 1,
@@ -92,8 +86,8 @@ export default async function SafetyPage() {
         <Card className="xl:col-span-2">
           <CardTitle
             title="Disproportionality screening (EVDAS-style)"
-            sub="Reporting odds ratio by product–event pair · signal threshold ROR ≥ 2 with N ≥ 3"
-            right={<Badge>DEMO DATA</Badge>}
+            sub="ROR + PRR + χ² computed live from the AE table · signal threshold ROR ≥ 2 with N ≥ 3"
+            right={<Badge>LIVE COMPUTATION</Badge>}
           />
           <table className="w-full text-left text-[12px]">
             <thead>
@@ -101,19 +95,21 @@ export default async function SafetyPage() {
                 <th className="pb-2 pr-4 font-medium">Product</th>
                 <th className="pb-2 pr-4 font-medium">Event (MedDRA PT, demo)</th>
                 <th className="pb-2 pr-4 text-right font-medium">N</th>
-                <th className="pb-2 pr-4 text-right font-medium">Expected</th>
                 <th className="pb-2 pr-4 text-right font-medium">ROR</th>
+                <th className="pb-2 pr-4 text-right font-medium">PRR</th>
+                <th className="pb-2 pr-4 text-right font-medium">χ²</th>
                 <th className="pb-2 font-medium">Assessment</th>
               </tr>
             </thead>
             <tbody>
               {rorRows.map((r) => (
-                <tr key={r.product} className={`row-hover border-b border-[#1c1c20] last:border-0 ${r.signal ? "bg-red-500/[0.04]" : ""}`}>
+                <tr key={r.product + r.event} className={`row-hover border-b border-[#1c1c20] last:border-0 ${r.signal ? "bg-red-500/[0.04]" : ""}`}>
                   <td className="py-2 pr-4 text-zinc-300">{r.product}</td>
                   <td className="py-2 pr-4 text-zinc-400">{r.event}</td>
-                  <td className="py-2 pr-4 text-right num text-zinc-300">{r.n}</td>
-                  <td className="py-2 pr-4 text-right num text-zinc-500">{r.expected}</td>
+                  <td className="py-2 pr-4 text-right num text-zinc-300">{r.a}</td>
                   <td className={`py-2 pr-4 text-right num font-semibold ${r.signal ? "text-red-400" : "text-zinc-400"}`}>{r.ror.toFixed(1)}</td>
+                  <td className="py-2 pr-4 text-right num text-zinc-400">{r.prr.toFixed(1)}</td>
+                  <td className="py-2 pr-4 text-right num text-zinc-400">{r.chi2.toFixed(2)}</td>
                   <td className="py-2">{r.signal ? <Status kind="crit" label="Signal — under review" live /> : <Status kind="neutral" label="No signal" />}</td>
                 </tr>
               ))}

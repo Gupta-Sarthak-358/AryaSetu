@@ -33,6 +33,29 @@ export default function InteropPage() {
       </Card>
 
       <Card>
+        <CardTitle
+          title="Submission exports — live downloads"
+          sub="Generated from the database on request · role-guarded · every export audit-logged"
+          right={<Badge>CSV / XML</Badge>}
+        />
+        <div className="grid gap-1.5 font-mono2 text-[11px] sm:grid-cols-2 xl:grid-cols-3">
+          {[
+            ["/api/export/sdtm/dm", "SDTM DM", "Demographics, all studies"],
+            ["/api/export/sdtm/ae", "SDTM AE", "Full AE domain from register"],
+            ["/api/export/sdtm/ex", "SDTM EX", "Exposure with batch lots"],
+            ["/api/export/adam/adsl", "ADaM ADSL", "Subject-level analysis set"],
+            ["/api/export/metadata/define-xml", "Define-XML 2.1", "Dataset metadata"],
+            ["/api/export/metadata/odm", "ODM 1.3.2", "CDASH instruments (draft)"],
+          ].map(([href, name, desc]) => (
+            <a key={href} href={href} className="flex items-center justify-between rounded-[5px] border border-[#222226] bg-[#101012] px-3 py-2 hover:border-emerald-500/40">
+              <span className="text-emerald-400">{name}</span>
+              <span className="text-zinc-600">{desc}</span>
+            </a>
+          ))}
+        </div>
+      </Card>
+
+      <Card>
         <CardTitle title="FHIR R4 resource coverage" sub="Draft Ayush-CT profile — exchange layer, not the internal database" />
         <div className="grid gap-2 md:grid-cols-2 xl:grid-cols-4">
           {interopResources.map((r) => (
