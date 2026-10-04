@@ -9,7 +9,7 @@ const globalForDb = globalThis as unknown as { __aryasetuDb?: PgliteDatabase<typ
 
 export function getDb(): PgliteDatabase<typeof schema> {
   if (!globalForDb.__aryasetuDb) {
-    const client = new PGlite(DATA_DIR);
+    const client = process.env.VITEST ? new PGlite() : new PGlite(DATA_DIR);
     globalForDb.__aryasetuDb = drizzle(client, { schema });
   }
   return globalForDb.__aryasetuDb;

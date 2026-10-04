@@ -5,6 +5,7 @@ import { Badge, Card, CardTitle, ProgressBar, StatusAuto } from "@/components/ui
 import { EnrollmentTrend, PrakritiDonut } from "@/components/charts";
 import { getAdverseEvents, getBatches, getDataQueries, getDeviations, getSites, getStudies, getStudy } from "@/lib/server/repo";
 import { QueryPanel } from "@/components/QueryPanel";
+import { DeviationPanel } from "@/components/DeviationPanel";
 import { fmtDate, pct } from "@/lib/utils";
 
 const stepState: Record<string, { dot: string; text: string }> = {
@@ -216,19 +217,11 @@ export default async function StudyDetailPage({ params }: { params: Promise<{ id
           <div id="quality" className="grid gap-3 xl:grid-cols-2">
             <Card>
               <CardTitle title="Deviations" sub={`${studyDeviations.length} recorded`} right={studyDeviations.some((d) => d.status === "CAPA") ? <StatusAuto status="CAPA" /> : undefined} />
-              <div className="space-y-2">
-                {studyDeviations.length === 0 && <p className="text-[11.5px] text-zinc-600">No deviations recorded for this study.</p>}
-                {studyDeviations.map((d) => (
-                  <div key={d.id} className="rounded-[5px] border border-[#222226] bg-[#101012] p-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[12px] font-medium text-zinc-200">{d.type}</span>
-                      <StatusAuto status={d.severity} />
-                    </div>
-                    <p className="mt-1 line-clamp-2 text-[11px] leading-relaxed text-zinc-500">{d.description}</p>
-                    <p className="mt-1.5 font-mono2 text-[9.5px] text-zinc-600 uppercase">{d.id} · {siteById(d.siteId)?.city} · {fmtDate(d.reported)} · {d.status}</p>
-                  </div>
-                ))}
-              </div>
+              <DeviationPanel
+                studyId={study.id}
+                sites={study.sites.map((sid) => ({ id: sid, city: siteById(sid)?.city ?? sid }))}
+                deviations={studyDeviations}
+              />
             </Card>
 
             <Card>

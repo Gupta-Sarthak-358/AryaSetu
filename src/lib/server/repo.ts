@@ -87,6 +87,16 @@ export async function nextSaeId(): Promise<string> {
   return `SAE-2026-0${max + 1}`;
 }
 
+export async function createDeviation(d: Deviation): Promise<void> {
+  await (await db()).insert(schema.deviations).values({ id: d.id, studyId: d.studyId, payload: d });
+}
+
+export async function nextDeviationId(): Promise<string> {
+  const ds = await getDeviations();
+  const max = Math.max(...ds.map((d) => parseInt(d.id.replace("DV-", ""), 10) || 0), 0);
+  return `DV-${String(max + 1).padStart(4, "0")}`;
+}
+
 export async function nextQueryId(): Promise<string> {
   const qs = await getDataQueries();
   const max = Math.max(...qs.map((q) => parseInt(q.id.replace("DQ-", ""), 10) || 0), 0);

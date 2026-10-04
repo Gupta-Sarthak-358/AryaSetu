@@ -167,8 +167,8 @@ export default async function SaeDetailPage({ params }: { params: Promise<{ id: 
             </div>
             <div className="grid grid-cols-2 gap-2">
               <span className="btn-crit cursor-pointer justify-center"><FileSignature size={12} /> Submit 24h initial report</span>
-              <span className="btn-outline cursor-pointer justify-center"><Download size={12} /> CIOMS-I form</span>
-              <span className="btn-outline cursor-pointer justify-center"><Download size={12} /> SUSAR line listing</span>
+              <a href={`/api/safety/saes/${sae.id}/cioms`} target="_blank" className="btn-outline justify-center"><Download size={12} /> CIOMS-I form (PDF)</a>
+              <a href={`/api/fhir/Bundle/${sae.id}`} target="_blank" className="btn-outline justify-center"><Download size={12} /> FHIR bundle (JSON)</a>
               <span className="btn-outline cursor-pointer justify-center"><Download size={12} /> Notify DSMB</span>
             </div>
             <p className="mt-3 text-[10.5px] leading-relaxed text-zinc-600">
