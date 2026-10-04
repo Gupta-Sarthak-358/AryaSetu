@@ -2,7 +2,7 @@
 
 import { Bell, ChevronDown, Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { usePersona, useRole } from "@/lib/role";
 import { personas } from "@/lib/data/personas";
 import { cn } from "@/lib/utils";
@@ -27,13 +27,16 @@ const sevColor: Record<string, string> = {
   info: "bg-sky-400",
 };
 
-export function Topbar() {
+export function Topbar({ sessionName, sessionRole }: { sessionName?: string; sessionRole?: string }) {
   const { role, setRole } = useRole();
   const persona = usePersona();
+  const displayName = sessionName ?? persona.name;
+  const displayRole = sessionRole ?? role;
   const [roleOpen, setRoleOpen] = useState(false);
   const [bellOpen, setBellOpen] = useState(false);
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const pathname = usePathname();
+  const router = useRouter();
   const segs = pathname.split("/").filter(Boolean);
   const crit = alerts.filter((a) => a.severity === "critical").length;
 
@@ -55,6 +58,7 @@ export function Topbar() {
     }
     setRole(r);
     setRoleOpen(false);
+    router.refresh();
   };
 
   return (
@@ -115,11 +119,11 @@ export function Topbar() {
           className="flex items-center gap-2 rounded-[5px] border border-[#2d2d33] bg-[#121214] py-1 pr-2 pl-1 hover:border-[#3f3f46]"
         >
           <span className="flex h-6 w-6 items-center justify-center rounded-[4px] bg-[#1e1e22] font-mono2 text-[10px] font-semibold text-zinc-300">
-            {persona.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+            {displayName.split(" ").map((w) => w[0]).slice(0, 2).join("")}
           </span>
           <span className="text-left">
-            <span className="block text-[11.5px] leading-tight font-medium text-zinc-200">{persona.name}</span>
-            <span className="block font-mono2 text-[9px] leading-tight tracking-wider text-emerald-400 uppercase">{role}</span>
+            <span className="block text-[11.5px] leading-tight font-medium text-zinc-200">{displayName}</span>
+            <span className="block font-mono2 text-[9px] leading-tight tracking-wider text-emerald-400 uppercase">{displayRole}</span>
           </span>
           <ChevronDown size={12} className="text-zinc-600" />
         </button>

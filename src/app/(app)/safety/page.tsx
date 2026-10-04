@@ -59,7 +59,7 @@ export default async function SafetyPage() {
                 <Clock3 size={11} /> NDCT 24h initial report
               </p>
               <p className="num mt-1 text-[34px] leading-none font-semibold text-red-400">{cd.text}</p>
-              <p className="mt-0.5 text-[10.5px] text-zinc-600">remaining of 24 hours</p>
+              <p className="mt-0.5 text-[10.5px] text-zinc-600">{cd.overdue ? "OVERDUE — 24h rule breached" : "remaining of 24 hours"}</p>
             </div>
           </div>
           <div className="mt-3 ml-2 h-[4px] overflow-hidden rounded-sm bg-white/8">

@@ -1,9 +1,10 @@
 import { getSae, updateSae } from "@/lib/server/repo";
-import { requireRole, errorResponse } from "@/lib/server/auth";
+import { assertSameOrigin, requireRole, errorResponse } from "@/lib/server/auth";
 import { appendAuditDirect } from "@/lib/server/audit";
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    assertSameOrigin(req);
     const user = await requireRole("Pharmacovigilance", "PI");
     const { id } = await params;
     const body = await req.json();

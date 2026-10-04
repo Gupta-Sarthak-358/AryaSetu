@@ -13,6 +13,26 @@ export default function InteropPage() {
       />
 
       <Card>
+        <CardTitle
+          title="Live FHIR endpoints"
+          sub="Served from the database as application/fhir+json — sign-in required"
+          right={<Badge>GET</Badge>}
+        />
+        <div className="space-y-1.5 font-mono2 text-[11px]">
+          {[
+            ["/api/fhir/ResearchStudy/AYU-036", "ResearchStudy — Guduchi registry"],
+            ["/api/fhir/AdverseEvent/SAE-2026-041", "AdverseEvent — with WHO-UMC + Naranjo + batch extensions"],
+            ["/api/fhir/Bundle/SAE-2026-041", "Bundle — Study + Subject + AdverseEvent + Medication"],
+          ].map(([path, desc]) => (
+            <a key={path} href={path} target="_blank" className="flex items-center justify-between rounded-[5px] border border-[#222226] bg-[#101012] px-3 py-2 hover:border-emerald-500/40">
+              <span className="text-emerald-400">{path}</span>
+              <span className="text-zinc-600">{desc}</span>
+            </a>
+          ))}
+        </div>
+      </Card>
+
+      <Card>
         <CardTitle title="FHIR R4 resource coverage" sub="Draft Ayush-CT profile — exchange layer, not the internal database" />
         <div className="grid gap-2 md:grid-cols-2 xl:grid-cols-4">
           {interopResources.map((r) => (

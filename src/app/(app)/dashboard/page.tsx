@@ -3,7 +3,8 @@ import { ArrowUpRight } from "lucide-react";
 import { Badge, Card, CardTitle, KpiTile, PageHeader, ProgressBar, Status, StatusAuto } from "@/components/ui";
 import { ChartTabs } from "@/components/ChartTabs";
 import { kpis, monitoringCompliance, myTasks } from "@/lib/data/ops";
-import { getAlerts, getAuditEntries, getStudies } from "@/lib/server/repo";
+import { getAuditEntries, getStudies } from "@/lib/server/repo";
+import { evaluateRules } from "@/lib/server/rules";
 import { countdown, fmtNum, pct } from "@/lib/utils";
 
 const sevKind: Record<string, "crit" | "warn" | "info"> = {
@@ -20,7 +21,7 @@ const prioKind: Record<string, "crit" | "warn" | "neutral"> = {
 };
 
 export default async function DashboardPage() {
-  const [studies, alerts, auditChain] = await Promise.all([getStudies(), getAlerts(), getAuditEntries()]);
+  const [studies, alerts, auditChain] = await Promise.all([getStudies(), evaluateRules(), getAuditEntries()]);
   const cd = countdown("2026-10-03T21:12:00+05:30");
   return (
     <div className="space-y-4">

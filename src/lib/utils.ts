@@ -55,8 +55,8 @@ export function fakeHash(seed: string, len = 40) {
   return out;
 }
 
-export function countdown(targetIso: string, fromIso = "2026-10-03T15:00:00+05:30") {
-  const ms = new Date(targetIso).getTime() - new Date(fromIso).getTime();
+export function countdown(targetIso: string, fromIso?: string) {
+  const ms = new Date(targetIso).getTime() - (fromIso ? new Date(fromIso).getTime() : Date.now());
   const sign = ms < 0 ? "-" : "";
   const abs = Math.abs(ms);
   const h = Math.floor(abs / 3600000);

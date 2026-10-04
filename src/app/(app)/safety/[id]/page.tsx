@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Download, FileSignature, Scale } from "lucide-react";
 import { Badge, Card, CardTitle, Status, StatusAuto } from "@/components/ui";
+import { TriagePanel } from "@/components/TriagePanel";
 import { getAdverseEvents, getBatch, getSae, getSite, getStudy } from "@/lib/server/repo";
 import { countdown, fmtDateTime } from "@/lib/utils";
 
@@ -70,7 +71,7 @@ export default async function SaeDetailPage({ params }: { params: Promise<{ id: 
           </div>
           {isOpen && (
             <div className="rounded-md border border-red-500/30 bg-red-500/5 px-5 py-3.5 text-center">
-              <p className="text-[9.5px] font-bold tracking-wider text-red-400 uppercase">24h initial report clock</p>
+              <p className="text-[9.5px] font-bold tracking-wider text-red-400 uppercase">24h initial report clock {cd.overdue ? "· OVERDUE" : ""}</p>
               <p className="num mt-1 text-[38px] leading-none font-semibold text-red-400">{cd.text}</p>
               <p className="mt-1 font-mono2 text-[10px] text-zinc-500">DUE {fmtDateTime(sae.initialDueAt)}</p>
             </div>
@@ -111,6 +112,7 @@ export default async function SaeDetailPage({ params }: { params: Promise<{ id: 
       </Card>
 
       <div className="grid gap-3 xl:grid-cols-2">
+        <div className="space-y-3">
         <Card>
           <CardTitle title="Causality panel — dual method" sub="WHO-UMC category + full Naranjo worksheet" />
           <div className="mb-4 grid grid-cols-2 gap-2">
@@ -137,6 +139,8 @@ export default async function SaeDetailPage({ params }: { params: Promise<{ id: 
             ))}
           </div>
         </Card>
+        <TriagePanel saeId={sae.id} whoUmc={sae.whoUmc} naranjo={sae.naranjo} />
+        </div>
 
         <div className="space-y-3">
           <Card>

@@ -96,6 +96,15 @@ export async function assertStudyAccess(user: SessionUser, studyId: string): Pro
   }
 }
 
+export function assertSameOrigin(req: Request) {
+  const origin = req.headers.get("origin");
+  if (!origin) return;
+  const host = req.headers.get("x-forwarded-host") ?? req.headers.get("host");
+  if (host && new URL(origin).host !== host) {
+    throw new HttpError(403, "Cross-origin request rejected");
+  }
+}
+
 export function errorResponse(e: unknown) {
   if (e instanceof HttpError) {
     return Response.json({ error: e.message }, { status: e.status });
