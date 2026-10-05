@@ -29,9 +29,8 @@ export default function AuditPage() {
   return (
     <div className="space-y-4">
       <PageHeader
-        code="SEC 07 · ALCOA+ INTEGRITY"
-        title="Audit Chain"
-        sub="Append-only, hash-linked records — who, what, when, before → after, why"
+        title="Audit trail"
+        sub="Append-only records: who changed what, when, and why"
         right={
           <button
             onClick={() => setTampered(!tampered)}
@@ -42,14 +41,14 @@ export default function AuditPage() {
         }
       />
 
-      <div className={`panel flex flex-wrap items-center justify-between gap-4 p-4 ${chainInvalid ? "border-red-500/35" : "border-emerald-500/25"}`}>
+      <div className={`panel flex flex-wrap items-center justify-between gap-4 p-4 ${chainInvalid ? "border-[#A44A2A]/40" : "border-[#2D5A3D]/40"}`}>
         <div className="flex items-center gap-3">
-          {chainInvalid ? <XCircle size={22} className="text-red-400" /> : <CheckCircle2 size={22} className="text-emerald-400" />}
+          {chainInvalid ? <XCircle size={22} className="text-[#A44A2A]" /> : <CheckCircle2 size={22} className="text-[#2D5A3D]" />}
           <div>
-            <p className={`text-[14px] font-semibold ${chainInvalid ? "text-red-400" : "text-emerald-300"}`}>
-              {chainInvalid ? "AUDIT CHAIN: INVALID — break detected" : "AUDIT CHAIN: VERIFIED"}
+            <p className={`text-[14px] font-semibold ${chainInvalid ? "text-[#A44A2A]" : "text-[#2D5A3D]"}`}>
+              {chainInvalid ? "Chain broken — tamper found" : "Chain verified"}
             </p>
-            <p className="mt-0.5 text-[11.5px] text-zinc-500">
+            <p className="mt-0.5 text-[11.5px] text-[#4A5A4F]">
               {tampered
                 ? "Record #7&rsquo;s stored hash no longer matches its recomputed content hash; every subsequent link is suspect."
                 : verify
@@ -58,41 +57,41 @@ export default function AuditPage() {
             </p>
           </div>
         </div>
-        <Status kind={chainInvalid ? "crit" : "ok"} label={chainInvalid ? "Tamper evident" : "SHA-256 chain · DB-backed"} live />
+        <Status kind={chainInvalid ? "crit" : "ok"} label={chainInvalid ? "Tamper evident" : "SHA-256 chain"} live />
       </div>
 
       {error && (
-        <div className="panel border-amber-500/25 p-3.5 text-[12px] text-amber-300">{error}</div>
+        <div className="panel border-[#B98A2F]/40 p-3.5 text-[12px] text-[#8A6A1F]">{error}</div>
       )}
 
       <Card className="p-0">
-        <div className="border-b border-[#222226] px-4 py-3">
-          <h3 className="text-[13px] font-semibold text-zinc-100">Chain records</h3>
-          <p className="mt-0.5 text-[11px] text-zinc-500">{entries.length} entries · served from the database · each row links to the previous hash</p>
+        <div className="border-b border-[#E3DED4] px-4 py-3">
+          <h3 className="text-[13px] font-semibold text-[#1C2A21]">Chain records</h3>
+          <p className="mt-0.5 text-[11px] text-[#4A5A4F]">{entries.length} entries · served from the database · each row links to the previous hash</p>
         </div>
-        <div className="divide-y divide-[#1c1c20]">
+        <div className="divide-y divide-[#E3DED4]">
           {[...entries].reverse().map((e) => {
             const isTampered = tampered && e.seq === 7;
             return (
-              <div key={e.seq} className={`flex gap-4 px-4 py-3 ${isTampered ? "bg-red-500/[0.05]" : ""}`}>
-                <span className="num w-7 shrink-0 pt-0.5 text-[10.5px] text-zinc-600">#{e.seq}</span>
+              <div key={e.seq} className={`flex gap-4 px-4 py-3 ${isTampered ? "bg-[#A44A2A]/[0.05]" : ""}`}>
+                <span className="num w-7 shrink-0 pt-0.5 text-[10.5px] text-[#7A887D]">#{e.seq}</span>
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-[12.5px] font-medium text-zinc-200">{e.action}</span>
+                    <span className="text-[12.5px] font-medium text-[#1C2A21]">{e.action}</span>
                     <Badge>{e.entity} · {e.entityId}</Badge>
                     {isTampered && <Status kind="crit" label="Modified outside system" live />}
                   </div>
-                  <p className="mt-1 text-[11px] text-zinc-500">
+                  <p className="mt-1 text-[11px] text-[#4A5A4F]">
                     {e.actor} · {e.role} · <span className="num">{fmtDateTime(e.ts)}</span>
                   </p>
                   <div className="mt-1.5 grid gap-1 text-[11px] md:grid-cols-2">
-                    {e.before && <p className="truncate"><span className="text-zinc-600">Before: </span><span className="text-zinc-400">{e.before}</span></p>}
-                    {e.after && <p className="truncate"><span className="text-zinc-600">After: </span><span className="text-emerald-400/90">{e.after}</span></p>}
-                    {e.reason && <p className="truncate md:col-span-2"><span className="text-zinc-600">Reason: </span><span className="text-zinc-400">{e.reason}</span></p>}
+                    {e.before && <p className="truncate"><span className="text-[#7A887D]">Before: </span><span className="text-[#4A5A4F]">{e.before}</span></p>}
+                    {e.after && <p className="truncate"><span className="text-[#7A887D]">After: </span><span className="text-[#2D5A3D]/90">{e.after}</span></p>}
+                    {e.reason && <p className="truncate md:col-span-2"><span className="text-[#7A887D]">Reason: </span><span className="text-[#4A5A4F]">{e.reason}</span></p>}
                   </div>
                   <div className="mt-1.5 flex flex-wrap gap-x-4 gap-y-0.5 font-mono2 text-[9.5px]">
-                    <span className={isTampered ? "text-red-400" : "text-emerald-500/70"}>hash {e.hash.slice(0, 12)}…{e.hash.slice(-6)}</span>
-                    <span className="text-zinc-700">prev {e.prevHash.slice(0, 12)}…</span>
+                    <span className={isTampered ? "text-[#A44A2A]" : "text-[#2D5A3D]/70"}>hash {e.hash.slice(0, 12)}…{e.hash.slice(-6)}</span>
+                    <span className="text-[#C9C2B2]">prev {e.prevHash.slice(0, 12)}…</span>
                   </div>
                 </div>
               </div>
@@ -103,26 +102,26 @@ export default function AuditPage() {
 
       <div className="grid gap-3 md:grid-cols-3">
         <Card>
-          <div className="mb-2 flex items-center gap-2"><ShieldCheck size={14} className="text-emerald-400" /><h3 className="text-[13px] font-semibold text-zinc-100">How the chain works</h3></div>
-          <p className="text-[11.5px] leading-relaxed text-zinc-500">
+          <div className="mb-2 flex items-center gap-2"><ShieldCheck size={14} className="text-[#2D5A3D]" /><h3 className="text-[13px] font-semibold text-[#1C2A21]">How the chain works</h3></div>
+          <p className="text-[11.5px] leading-relaxed text-[#4A5A4F]">
             Each record&rsquo;s SHA-256 is computed over its content plus the previous record&rsquo;s hash and stored in the
             append-only audit_events table. Editing any historical record breaks every link after it — detected by a
             single verification pass over the database.
           </p>
         </Card>
         <Card>
-          <h3 className="mb-2 text-[13px] font-semibold text-zinc-100">ALCOA+ coverage</h3>
+          <h3 className="mb-2 text-[13px] font-semibold text-[#1C2A21]">ALCOA+ coverage</h3>
           <div className="grid grid-cols-2 gap-1.5 text-[10.5px]">
             {["Attributable", "Legible", "Contemporaneous", "Original", "Accurate", "Complete", "Consistent", "Enduring", "Available"].map((a) => (
-              <span key={a} className="flex items-center gap-1.5 rounded-[3px] bg-emerald-500/5 px-2 py-1 text-emerald-400">
+              <span key={a} className="flex items-center gap-1.5 rounded-[3px] bg-[#2D5A3D]/5 px-2 py-1 text-[#2D5A3D]">
                 <CheckCircle2 size={9} /> {a}
               </span>
             ))}
           </div>
         </Card>
         <Card>
-          <h3 className="mb-2 text-[13px] font-semibold text-zinc-100">Honest scope</h3>
-          <p className="text-[11.5px] leading-relaxed text-zinc-500">
+          <h3 className="mb-2 text-[13px] font-semibold text-[#1C2A21]">Honest scope</h3>
+          <p className="text-[11.5px] leading-relaxed text-[#4A5A4F]">
             Application-level tamper evidence over a real database — not WORM storage, not a 21 CFR Part 11
             certification. HSM-bound signing keys and object-lock storage are Phase-2/3 items.
           </p>

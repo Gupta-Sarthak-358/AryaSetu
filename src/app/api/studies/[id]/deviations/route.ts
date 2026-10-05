@@ -12,9 +12,6 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     if (!body.siteId || !body.type || !body.description) {
       return Response.json({ error: "siteId, type and description required" }, { status: 400 });
     }
-    if (body.severity !== undefined && !["Minor", "Major", "Critical"].includes(body.severity)) {
-      return Response.json({ error: "severity must be Minor, Major or Critical" }, { status: 400 });
-    }
 
     const d = {
       id: await nextDeviationId(),

@@ -16,11 +16,11 @@ import {
 } from "recharts";
 
 const tooltipStyle = {
-  backgroundColor: "#17171a",
-  border: "1px solid #2d2d33",
-  borderRadius: "5px",
+  backgroundColor: "#FFFFFF",
+  border: "1px solid #E3DED4",
+  borderRadius: "6px",
   fontSize: "11.5px",
-  color: "#d4d4d8",
+  color: "#1C2A21",
   fontFamily: "var(--font-jbmono), monospace",
 };
 
@@ -30,16 +30,16 @@ export function EnrollmentTrend({ data }: { data: { month: string; enrolled: num
       <AreaChart data={data} margin={{ top: 8, right: 8, left: -14, bottom: 0 }}>
         <defs>
           <linearGradient id="enrollGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#10b981" stopOpacity={0.35} />
-            <stop offset="100%" stopColor="#10b981" stopOpacity={0.02} />
+            <stop offset="0%" stopColor="#2D5A3D" stopOpacity={0.25} />
+            <stop offset="100%" stopColor="#2D5A3D" stopOpacity={0.02} />
           </linearGradient>
         </defs>
-        <CartesianGrid stroke="rgba(148,163,184,0.08)" vertical={false} />
-        <XAxis dataKey="month" stroke="#475569" fontSize={11} tickLine={false} axisLine={false} />
-        <YAxis stroke="#475569" fontSize={11} tickLine={false} axisLine={false} />
+        <CartesianGrid stroke="rgba(28,42,33,0.08)" vertical={false} />
+        <XAxis dataKey="month" stroke="#7A887D" fontSize={11} tickLine={false} axisLine={false} />
+        <YAxis stroke="#7A887D" fontSize={11} tickLine={false} axisLine={false} />
         <Tooltip contentStyle={tooltipStyle} />
-        <Area type="monotone" dataKey="target" stroke="#f59e0b" strokeDasharray="5 4" strokeWidth={1.5} fill="none" name="Target (cumulative)" />
-        <Area type="monotone" dataKey="enrolled" stroke="#10b981" strokeWidth={2.5} fill="url(#enrollGrad)" name="Enrolled (cumulative)" />
+        <Area type="monotone" dataKey="target" stroke="#B98A2F" strokeDasharray="5 4" strokeWidth={1.5} fill="none" name="Target (cumulative)" />
+        <Area type="monotone" dataKey="enrolled" stroke="#2D5A3D" strokeWidth={2.5} fill="url(#enrollGrad)" name="Enrolled (cumulative)" />
       </AreaChart>
     </ResponsiveContainer>
   );
@@ -49,18 +49,18 @@ export function SiteBars({ data }: { data: { site: string; enrolled: number; tar
   return (
     <ResponsiveContainer width="100%" height={260}>
       <BarChart data={data} layout="vertical" margin={{ top: 0, right: 12, left: 8, bottom: 0 }}>
-        <CartesianGrid stroke="rgba(148,163,184,0.08)" horizontal={false} />
-        <XAxis type="number" stroke="#475569" fontSize={11} tickLine={false} axisLine={false} />
-        <YAxis type="category" dataKey="site" width={110} stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+        <CartesianGrid stroke="rgba(28,42,33,0.08)" horizontal={false} />
+        <XAxis type="number" stroke="#7A887D" fontSize={11} tickLine={false} axisLine={false} />
+        <YAxis type="category" dataKey="site" width={110} stroke="#4A5A4F" fontSize={11} tickLine={false} axisLine={false} />
         <Tooltip contentStyle={tooltipStyle} />
-        <Bar dataKey="target" fill="rgba(245,158,11,0.25)" radius={[0, 4, 4, 0]} name="Target" barSize={7} />
-        <Bar dataKey="enrolled" fill="#10b981" radius={[0, 4, 4, 0]} name="Enrolled" barSize={7} />
+        <Bar dataKey="target" fill="rgba(185,138,47,0.3)" radius={[0, 4, 4, 0]} name="Target" barSize={7} />
+        <Bar dataKey="enrolled" fill="#2D5A3D" radius={[0, 4, 4, 0]} name="Enrolled" barSize={7} />
       </BarChart>
     </ResponsiveContainer>
   );
 }
 
-const PIE_COLORS = ["#10b981", "#f59e0b", "#38bdf8", "#8b5cf6"];
+const PIE_COLORS = ["#2D5A3D", "#B98A2F", "#3E6B8C", "#6B5A8C"];
 
 export function PrakritiDonut({ data }: { data: { prakriti: string; count: number }[] }) {
   return (
@@ -81,12 +81,12 @@ export function AeBars({ data }: { data: { week: string; nonSerious: number; ser
   return (
     <ResponsiveContainer width="100%" height={220}>
       <BarChart data={data} margin={{ top: 8, right: 8, left: -22, bottom: 0 }}>
-        <CartesianGrid stroke="rgba(148,163,184,0.08)" vertical={false} />
-        <XAxis dataKey="week" stroke="#475569" fontSize={11} tickLine={false} axisLine={false} />
-        <YAxis stroke="#475569" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
+        <CartesianGrid stroke="rgba(28,42,33,0.08)" vertical={false} />
+        <XAxis dataKey="week" stroke="#7A887D" fontSize={11} tickLine={false} axisLine={false} />
+        <YAxis stroke="#7A887D" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
         <Tooltip contentStyle={tooltipStyle} />
-        <Bar dataKey="nonSerious" stackId="a" fill="#38bdf8" name="Non-serious" radius={[0, 0, 0, 0]} barSize={26} />
-        <Bar dataKey="serious" stackId="a" fill="#ef4444" name="Serious" radius={[4, 4, 0, 0]} barSize={26} />
+        <Bar dataKey="nonSerious" stackId="a" fill="#3E6B8C" name="Non-serious" radius={[0, 0, 0, 0]} barSize={26} />
+        <Bar dataKey="serious" stackId="a" fill="#A44A2A" name="Serious" radius={[4, 4, 0, 0]} barSize={26} />
       </BarChart>
     </ResponsiveContainer>
   );

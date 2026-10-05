@@ -52,12 +52,12 @@ export function QueryPanel({ studyId, siteId, queries }: Props) {
 
   return (
     <div className="space-y-2">
-      {queries.length === 0 && <p className="text-[11.5px] text-zinc-600">No queries for this study.</p>}
+      {queries.length === 0 && <p className="text-[11.5px] text-[#7A887D]">No queries for this study.</p>}
       {queries.map((q) => (
-        <div key={q.id} className="flex items-start justify-between gap-2 rounded-[5px] border border-[#222226] bg-[#101012] p-3">
+        <div key={q.id} className="flex items-start justify-between gap-2 rounded-[5px] border border-[#E3DED4] bg-[#FFFFFF] p-3">
           <div>
-            <p className="text-[12px] text-zinc-200">{q.field}</p>
-            <p className="mt-0.5 font-mono2 text-[9.5px] text-zinc-600 uppercase">{q.id} · {q.ageDays}D OLD</p>
+            <p className="text-[12px] text-[#1C2A21]">{q.field}</p>
+            <p className="mt-0.5 font-mono2 text-[9.5px] text-[#7A887D] uppercase">{q.id} · {q.ageDays}D OLD</p>
           </div>
           <div className="flex items-center gap-2">
             {q.status === "Open" && (
@@ -72,11 +72,11 @@ export function QueryPanel({ studyId, siteId, queries }: Props) {
           value={field}
           onChange={(e) => setField(e.target.value)}
           placeholder="Raise query — e.g. HAM-A item 7 blank"
-          className="flex-1 rounded-[5px] border border-[#2d2d33] bg-[#0d0d0f] px-2.5 py-1.5 text-[11.5px] text-zinc-200 outline-none placeholder:text-zinc-600"
+          className="flex-1 rounded-[5px] border border-[#E3DED4] bg-[#FAF9F6] px-2.5 py-1.5 text-[11.5px] text-[#1C2A21] outline-none placeholder:text-[#7A887D]"
         />
         <button onClick={raise} disabled={busy} className="btn-outline shrink-0 !py-1.5 text-[11px]">{busy ? "…" : "Raise"}</button>
       </div>
-      {msg && <p className={`text-[10.5px] ${msg.includes("raised") ? "text-emerald-400" : "text-red-400"}`}>{msg}</p>}
+      {msg && <p className={`text-[10.5px] ${msg.includes("raised") ? "text-[#2D5A3D]" : "text-[#A44A2A]"}`}>{msg}</p>}
     </div>
   );
 }

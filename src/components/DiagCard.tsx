@@ -30,8 +30,8 @@ export function DiagCard() {
       .catch((e) => setError(e.message));
   }, []);
 
-  if (error) return <p className="text-[11.5px] text-red-400">Diagnostics unavailable ({error}).</p>;
-  if (!diag) return <p className="text-[11.5px] text-zinc-600">Loading deployment diagnostics…</p>;
+  if (error) return <p className="text-[11.5px] text-[#A44A2A]">Diagnostics unavailable ({error}).</p>;
+  if (!diag) return <p className="text-[11.5px] text-[#7A887D]">Loading deployment diagnostics…</p>;
 
   const rows: [string, string][] = [
     ["Deployment", `${diag.commit} · ${diag.region} · ${diag.time.slice(0, 16).replace("T", " ")}Z`],
@@ -47,13 +47,13 @@ export function DiagCard() {
   return (
     <div className="space-y-1.5">
       <div className="mb-2 flex items-center gap-2">
-        <Activity size={13} className="text-emerald-400" />
-        <p className="font-mono2 text-[10px] tracking-wider text-zinc-600 uppercase">Live deployment check — no secrets exposed</p>
+        <Activity size={13} className="text-[#2D5A3D]" />
+        <p className="font-mono2 text-[10px] tracking-wider text-[#7A887D] uppercase">Live deployment check — no secrets exposed</p>
       </div>
       {rows.map(([k, v]) => (
-        <div key={k} className="flex items-center justify-between rounded-[5px] border border-[#222226] bg-[#101012] px-3 py-1.5 text-[11.5px]">
-          <span className="text-zinc-500">{k}</span>
-          <span className="font-mono2 text-zinc-200">{v}</span>
+        <div key={k} className="flex items-center justify-between rounded-[5px] border border-[#E3DED4] bg-[#FFFFFF] px-3 py-1.5 text-[11.5px]">
+          <span className="text-[#4A5A4F]">{k}</span>
+          <span className="font-mono2 text-[#1C2A21]">{v}</span>
         </div>
       ))}
     </div>

@@ -1,16 +1,25 @@
 @import "tailwindcss";
 
 @theme {
-  --color-base: #0a0a0b;
-  --color-panel: #121214;
-  --color-panel2: #17171a;
-  --color-line: #222226;
-  --color-line-strong: #2d2d33;
-  --color-ok: #34d399;
-  --color-warn: #fbbf24;
-  --color-crit: #f87171;
-  --color-info: #60a5fa;
-  --font-ui: var(--font-inter), system-ui, sans-serif;
+  --color-base: #FAF9F6;
+  --color-panel: #FFFFFF;
+  --color-panel2: #F3EFE5;
+  --color-line: #E3DED4;
+  --color-line-strong: #C9C2B2;
+  --color-ink: #1C2A21;
+  --color-ink2: #4A5A4F;
+  --color-ink3: #7A887D;
+  --color-leaf: #2D5A3D;
+  --color-leaf-dark: #22452F;
+  --color-sage: #5A7A62;
+  --color-turmeric: #B98A2F;
+  --color-clay: #A44A2A;
+  --color-ok: #2D5A3D;
+  --color-warn: #B98A2F;
+  --color-crit: #A44A2A;
+  --color-info: #3E6B8C;
+  --font-display: var(--font-newsreader), Georgia, serif;
+  --font-ui: var(--font-dmsans), system-ui, sans-serif;
   --font-mono2: var(--font-jbmono), ui-monospace, monospace;
 }
 
@@ -20,10 +29,17 @@ html {
 
 body {
   background: var(--color-base);
-  color: #d4d4d8;
+  color: var(--color-ink);
   font-family: var(--font-ui);
-  font-size: 13px;
+  font-size: 14px;
+  line-height: 1.7;
   -webkit-font-smoothing: antialiased;
+}
+
+.display {
+  font-family: var(--font-display);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .font-mono2 {
@@ -38,22 +54,29 @@ body {
 
 .panel {
   background: var(--color-panel);
-  border: 1px solid var(--color-line);
-  border-radius: 6px;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(28, 42, 33, 0.06);
 }
 
 .panel-2 {
   background: var(--color-panel2);
   border: 1px solid var(--color-line);
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .section-label {
   font-size: 10.5px;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #71717a;
+  color: var(--color-ink3);
+}
+
+/* Heavier ledger variant — intentional hierarchy variation (organic, not template) */
+.ledger-strong {
+  border: 1px solid var(--color-line-strong);
+  border-top: 2px solid var(--color-leaf);
 }
 
 .hairline-t { border-top: 1px solid var(--color-line); }
@@ -63,50 +86,64 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #fafafa;
-  color: #09090b;
-  font-size: 12.5px;
+  background: var(--color-leaf);
+  color: #fff;
+  font-size: 13px;
   font-weight: 600;
-  padding: 7px 14px;
-  border-radius: 5px;
-  border: 1px solid #fafafa;
+  padding: 9px 16px;
+  min-height: 44px;
+  border-radius: 6px;
+  border: 1px solid var(--color-leaf);
   cursor: pointer;
   transition: background 0.15s ease;
 }
-.btn:hover { background: #d4d4d8; border-color: #d4d4d8; }
+.btn:hover { background: var(--color-leaf-dark); border-color: var(--color-leaf-dark); box-shadow: 0 1px 3px rgba(28, 42, 33, 0.25); }
+.btn:focus-visible { outline: 2px solid var(--color-leaf); outline-offset: 2px; }
+.btn:active { transform: translateY(0.5px); }
 
 .btn-outline {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   background: transparent;
-  color: #d4d4d8;
-  font-size: 12.5px;
+  color: var(--color-ink);
+  font-size: 13px;
   font-weight: 500;
-  padding: 7px 14px;
-  border-radius: 5px;
+  padding: 9px 16px;
+  min-height: 44px;
+  border-radius: 6px;
   border: 1px solid var(--color-line-strong);
   cursor: pointer;
   transition: border-color 0.15s ease, color 0.15s ease;
 }
-.btn-outline:hover { border-color: #52525b; color: #fafafa; }
+.btn-outline:hover { border-color: var(--color-leaf); color: var(--color-leaf-dark); background: rgba(45, 90, 61, 0.06); }
+.btn-outline:focus-visible { outline: 2px solid var(--color-leaf); outline-offset: 2px; }
 
 .btn-crit {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #b91c1c;
+  background: var(--color-clay);
   color: #fff;
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 600;
-  padding: 7px 14px;
-  border-radius: 5px;
-  border: 1px solid #b91c1c;
+  padding: 9px 16px;
+  min-height: 44px;
+  border-radius: 6px;
+  border: 1px solid var(--color-clay);
   cursor: pointer;
 }
-.btn-crit:hover { background: #991b1b; }
+.btn-crit:hover { background: #8A3B22; }
 
-.row-hover:hover { background: rgba(255, 255, 255, 0.025); }
+.row-hover { transition: background 0.12s ease; }
+.row-hover:hover { background: rgba(45, 90, 61, 0.08); }
+.row-hover:active { background: rgba(45, 90, 61, 0.13); }
+
+/* Content links underline on hover — nav, buttons and sidebar excluded by scope */
+main :is(p, li, td, dd) a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 
 .sticky-thead th {
   position: sticky;
@@ -139,7 +176,17 @@ body {
 .fade-up { animation: fade-up 0.4s ease-out both; }
 
 .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
-.scrollbar-thin::-webkit-scrollbar-thumb { background: #2d2d33; border-radius: 3px; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: #C9C2B2; border-radius: 3px; }
 .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
 
-::selection { background: rgba(52, 211, 153, 0.25); }
+::selection { background: rgba(45, 90, 61, 0.2); }
+
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--color-leaf);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track, .live-dot, .fade-up { animation: none; }
+  html { scroll-behavior: auto; }
+}

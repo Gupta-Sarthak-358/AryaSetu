@@ -22,9 +22,9 @@ const crumbs: Record<string, string> = {
 };
 
 const sevColor: Record<string, string> = {
-  critical: "bg-red-400",
-  warning: "bg-amber-400",
-  info: "bg-sky-400",
+  critical: "bg-[#A44A2A]",
+  warning: "bg-[#B98A2F]",
+  info: "bg-[#3E6B8C]",
 };
 
 export function Topbar({ sessionName, sessionRole }: { sessionName?: string; sessionRole?: string }) {
@@ -67,50 +67,51 @@ export function Topbar({ sessionName, sessionRole }: { sessionName?: string; ses
   };
 
   return (
-    <header className="sticky top-0 z-30 flex items-center gap-4 border-b border-[#1c1c20] bg-[#0a0a0b]/92 px-5 py-2.5 backdrop-blur-sm">
-      <nav className="flex items-center gap-1.5 text-[12px] text-zinc-500">
-        <span className="font-mono2 text-[10.5px] tracking-wider text-zinc-600 uppercase">AryaSetu</span>
+    <header className="sticky top-0 z-30 flex items-center gap-4 border-b border-[#E3DED4] bg-[#FAF9F6]/95 px-5 py-2.5 backdrop-blur-sm">
+      <nav className="flex items-center gap-1.5 text-[12px] text-[#4A5A4F]" aria-label="Breadcrumb">
         {segs.map((s, i) => (
           <span key={i} className="flex items-center gap-1.5">
-            <span className="text-zinc-700">/</span>
-            <span className={i === segs.length - 1 ? "font-medium text-zinc-200" : ""}>{crumbs[s] ?? s}</span>
+            {i > 0 && <span className="text-[#C9C2B2]">/</span>}
+            <span className={i === segs.length - 1 ? "font-medium text-[#1C2A21]" : ""}>{crumbs[s] ?? s}</span>
           </span>
         ))}
       </nav>
 
-      <div className="mx-auto hidden w-full max-w-sm items-center gap-2 rounded-[5px] border border-[#2d2d33] bg-[#121214] px-2.5 py-[5px] text-[12px] text-zinc-500 md:flex">
+      <div className="mx-auto hidden w-full max-w-sm items-center gap-2 rounded-[6px] border border-[#E3DED4] bg-[#FFFFFF] px-2.5 py-[5px] text-[12px] text-[#4A5A4F] md:flex">
         <Search size={13} />
         <input
-          placeholder="Search studies, participants, SAEs, batches…"
-          className="w-full bg-transparent text-zinc-300 outline-none placeholder:text-zinc-600"
+          placeholder="Search studies, SAEs, batches…"
+          aria-label="Search studies, SAEs, batches"
+          className="w-full bg-transparent text-[#1C2A21] outline-none placeholder:text-[#7A887D]"
         />
-        <kbd className="rounded border border-[#2d2d33] px-1 font-mono2 text-[9.5px] text-zinc-600">⌘K</kbd>
+        <kbd className="rounded border border-[#E3DED4] px-1 font-mono2 text-[9.5px] text-[#7A887D]">⌘K</kbd>
       </div>
 
-      <span className="hidden items-center gap-2 font-mono2 text-[11px] text-zinc-500 lg:flex">
-        <span className="live-dot inline-block h-[6px] w-[6px] rounded-full bg-emerald-400" />
+      <span className="hidden items-center gap-2 font-mono2 text-[11px] text-[#4A5A4F] lg:flex">
+        <span className="live-dot inline-block h-[6px] w-[6px] rounded-full bg-[#2D5A3D]" />
         03-OCT-2026 15:00 IST
       </span>
 
       <div className="relative">
         <button
           onClick={() => { setBellOpen(!bellOpen); setRoleOpen(false); }}
-          className="relative flex h-8 w-8 items-center justify-center rounded-[5px] border border-[#2d2d33] bg-[#121214] text-zinc-400 hover:text-zinc-200"
+          aria-label={`Alerts, ${alerts.length} active`}
+          className="relative flex h-11 w-11 items-center justify-center rounded-[6px] border border-[#E3DED4] bg-[#FFFFFF] text-[#4A5A4F] transition-colors hover:border-[#2D5A3D] hover:text-[#1C2A21] active:bg-[#F3EFE5]"
         >
-          <Bell size={14} />
-          <span className={cn("absolute -top-1 -right-1 flex h-3.5 min-w-3.5 items-center justify-center rounded-[3px] px-0.5 font-mono2 text-[9px] font-bold", crit > 0 ? "bg-red-500 text-white" : "bg-amber-500 text-black")}>
+          <Bell size={15} />
+          <span className={cn("absolute -top-1 -right-1 flex h-3.5 min-w-3.5 items-center justify-center rounded-[3px] px-0.5 font-mono2 text-[9px] font-bold", crit > 0 ? "bg-[#A44A2A] text-white" : "bg-[#B98A2F] text-white")}>
             {alerts.length}
           </span>
         </button>
         {bellOpen && (
-          <div className="absolute right-0 mt-1.5 w-[380px] rounded-md border border-[#2d2d33] bg-[#121214] p-1.5 shadow-2xl">
-            <p className="section-label px-2 py-1.5">Active alerts · {alerts.length}</p>
+          <div className="absolute right-0 mt-1.5 w-[380px] rounded-md border border-[#E3DED4] bg-[#FFFFFF] p-1.5 shadow-xl">
+            <p className="px-2 py-1.5 text-[12px] font-semibold text-[#1C2A21]">Alerts · {alerts.length}</p>
             {alerts.map((a) => (
-              <Link key={a.id} href={a.href} onClick={() => setBellOpen(false)} className="flex items-start gap-2.5 rounded-[5px] px-2 py-2 hover:bg-[#1a1a1e]">
+              <Link key={a.id} href={a.href} onClick={() => setBellOpen(false)} className="flex items-start gap-2.5 rounded-[5px] px-2 py-2 hover:bg-[#F3EFE5] active:bg-[#E9E2D2]">
                 <span className={cn("mt-1.5 h-[6px] w-[6px] shrink-0 rounded-full", sevColor[a.severity])} />
                 <span>
-                  <span className="block text-[12px] leading-snug text-zinc-200">{a.title}</span>
-                  <span className="font-mono2 text-[10px] text-zinc-600">{a.studyId ?? "PORTFOLIO"} · {a.action.toUpperCase()} →</span>
+                  <span className="block text-[12px] leading-snug text-[#1C2A21]">{a.title}</span>
+                  <span className="font-mono2 text-[10px] text-[#7A887D]">{a.studyId ?? "PORTFOLIO"} · {a.action}</span>
                 </span>
               </Link>
             ))}
@@ -121,30 +122,31 @@ export function Topbar({ sessionName, sessionRole }: { sessionName?: string; ses
       <div className="relative">
         <button
           onClick={() => { setRoleOpen(!roleOpen); setBellOpen(false); }}
-          className="flex items-center gap-2 rounded-[5px] border border-[#2d2d33] bg-[#121214] py-1 pr-2 pl-1 hover:border-[#3f3f46]"
+          aria-label={`Signed in as ${displayName}, ${displayRole}. Switch role`}
+          className="flex min-h-[44px] items-center gap-2 rounded-[6px] border border-[#E3DED4] bg-[#FFFFFF] py-1 pr-2 pl-1 transition-colors hover:border-[#2D5A3D] active:bg-[#F3EFE5]"
         >
-          <span className="flex h-6 w-6 items-center justify-center rounded-[4px] bg-[#1e1e22] font-mono2 text-[10px] font-semibold text-zinc-300">
+          <span className="flex h-6 w-6 items-center justify-center rounded-[4px] bg-[#F3EFE5] font-mono2 text-[10px] font-semibold text-[#1C2A21]">
             {displayName.split(" ").map((w) => w[0]).slice(0, 2).join("")}
           </span>
           <span className="text-left">
-            <span className="block text-[11.5px] leading-tight font-medium text-zinc-200">{displayName}</span>
-            <span className="block font-mono2 text-[9px] leading-tight tracking-wider text-emerald-400 uppercase">{displayRole}</span>
+            <span className="block text-[11.5px] leading-tight font-medium text-[#1C2A21]">{displayName}</span>
+            <span className="block font-mono2 text-[9px] leading-tight tracking-wider text-[#2D5A3D] uppercase">{displayRole}</span>
           </span>
-          <ChevronDown size={12} className="text-zinc-600" />
+          <ChevronDown size={12} className="text-[#7A887D]" />
         </button>
         {roleOpen && (
-          <div className="absolute right-0 mt-1.5 w-[300px] rounded-md border border-[#2d2d33] bg-[#121214] p-1.5 shadow-2xl">
-            <p className="section-label px-2 py-1.5">Switch role · demo personas</p>
+          <div className="absolute right-0 mt-1.5 w-[300px] rounded-md border border-[#E3DED4] bg-[#FFFFFF] p-1.5 shadow-xl">
+            <p className="px-2 py-1.5 text-[12px] font-semibold text-[#1C2A21]">Switch role</p>
             {personas.map((p) => (
               <button
                 key={p.role}
                 onClick={() => switchRole(p.role as Role)}
-                className={cn("flex w-full items-center gap-2.5 rounded-[5px] px-2 py-2 text-left hover:bg-[#1a1a1e]", p.role === role && "bg-[#1a1a1e]")}
+                className={cn("flex min-h-[44px] w-full items-center gap-2.5 rounded-[5px] px-2 py-2 text-left hover:bg-[#F3EFE5] active:bg-[#E9E2D2]", p.role === role && "bg-[#F3EFE5]")}
               >
-                <span className={cn("h-[6px] w-[6px] shrink-0 rounded-full", p.role === role ? "bg-emerald-400" : "bg-zinc-700")} />
+                <span className={cn("h-[6px] w-[6px] shrink-0 rounded-full", p.role === role ? "bg-[#2D5A3D]" : "bg-[#C9C2B2]")} />
                 <span>
-                  <span className="block text-[12px] text-zinc-200">{p.name}</span>
-                  <span className="font-mono2 text-[9.5px] text-zinc-600 uppercase">{p.role} · {p.org}</span>
+                  <span className="block text-[12px] text-[#1C2A21]">{p.name}</span>
+                  <span className="font-mono2 text-[9.5px] text-[#7A887D]">{p.role} · {p.org}</span>
                 </span>
               </button>
             ))}
@@ -155,9 +157,10 @@ export function Topbar({ sessionName, sessionRole }: { sessionName?: string; ses
       <button
         onClick={logout}
         title="Sign out"
-        className="flex h-8 w-8 items-center justify-center rounded-[5px] border border-[#2d2d33] bg-[#121214] text-zinc-500 hover:text-red-400"
+        aria-label="Sign out"
+        className="flex h-11 w-11 items-center justify-center rounded-[6px] border border-[#E3DED4] bg-[#FFFFFF] text-[#4A5A4F] transition-colors hover:border-[#A44A2A] hover:text-[#A44A2A] active:bg-[#F3EFE5]"
       >
-        <LogOut size={13} />
+        <LogOut size={14} />
       </button>
     </header>
   );

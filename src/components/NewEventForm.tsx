@@ -10,7 +10,7 @@ interface Props {
   batches: { id: string; product: string }[];
 }
 
-const inputCls = "w-full rounded-[5px] border border-[#2d2d33] bg-[#0d0d0f] px-2.5 py-2 text-[12px] text-zinc-200 outline-none placeholder:text-zinc-600 focus:border-[#3f3f46]";
+const inputCls = "w-full min-h-[44px] rounded-[6px] border border-[#E3DED4] bg-[#FAF9F6] px-2.5 py-2 text-[12px] text-[#1C2A21] outline-none placeholder:text-[#7A887D] focus:border-[#2D5A3D]";
 
 export function NewEventForm({ studies, sites, batches }: Props) {
   const router = useRouter();
@@ -66,64 +66,64 @@ export function NewEventForm({ studies, sites, batches }: Props) {
 
   return (
     <div className="panel p-4">
-      <div className="mb-3 flex items-center justify-between border-b border-[#222226] pb-3">
+      <div className="mb-3 flex items-center justify-between border-b border-[#E3DED4] pb-3">
         <div>
-          <h3 className="text-[13px] font-semibold text-zinc-100">New safety report</h3>
-          <p className="mt-0.5 text-[11px] text-zinc-500">Serious events auto-start the NDCT 24h statutory clock · PI / Coordinator / PV only</p>
+          <h3 className="text-[14px] font-semibold text-[#1C2A21]">New safety report</h3>
+          <p className="mt-0.5 text-[12px] text-[#4A5A4F]">Serious reports start the 24h clock · PI, Coordinator or PV only</p>
         </div>
-        <button onClick={() => setOpen(false)} className="btn-outline !py-1 text-[11px]">Close</button>
+        <button onClick={() => setOpen(false)} className="btn-outline min-h-[44px] !py-1 text-[11px]">Close</button>
       </div>
 
       <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
-        <label className="text-[11px] text-zinc-500">Study
+        <label className="text-[11px] text-[#4A5A4F]">Study
           <select value={form.studyId} onChange={(e) => set("studyId", e.target.value)} className={`mt-1 ${inputCls}`}>
             {studies.map((s) => <option key={s.id} value={s.id}>{s.id} — {s.shortTitle}</option>)}
           </select>
         </label>
-        <label className="text-[11px] text-zinc-500">Site
+        <label className="text-[11px] text-[#4A5A4F]">Site
           <select value={form.siteId} onChange={(e) => set("siteId", e.target.value)} className={`mt-1 ${inputCls}`}>
             {sites.map((s) => <option key={s.id} value={s.id}>{s.city} — {s.name.split("—")[0]}</option>)}
           </select>
         </label>
-        <label className="text-[11px] text-zinc-500">Participant ID (synthetic)
+        <label className="text-[11px] text-[#4A5A4F]">Participant ID (synthetic)
           <input value={form.participantId} onChange={(e) => set("participantId", e.target.value)} placeholder="PT-036-0199" className={`mt-1 ${inputCls}`} />
         </label>
-        <label className="text-[11px] text-zinc-500">Suspect batch (optional)
+        <label className="text-[11px] text-[#4A5A4F]">Suspect batch (optional)
           <select value={form.batchId} onChange={(e) => set("batchId", e.target.value)} className={`mt-1 ${inputCls}`}>
             <option value="">— none —</option>
             {batches.map((b) => <option key={b.id} value={b.id}>{b.id} — {b.product}</option>)}
           </select>
         </label>
-        <label className="text-[11px] text-zinc-500">Seriousness
+        <label className="text-[11px] text-[#4A5A4F]">Seriousness
           <select value={form.seriousness} onChange={(e) => set("seriousness", e.target.value)} className={`mt-1 ${inputCls}`}>
             <option>Non-serious</option><option>Serious</option>
           </select>
         </label>
-        <label className="text-[11px] text-zinc-500">Severity
+        <label className="text-[11px] text-[#4A5A4F]">Severity
           <select value={form.severity} onChange={(e) => set("severity", e.target.value)} className={`mt-1 ${inputCls}`}>
             <option>Mild</option><option>Moderate</option><option>Severe</option>
           </select>
         </label>
-        <label className="text-[11px] text-zinc-500">Onset date
+        <label className="text-[11px] text-[#4A5A4F]">Onset date
           <input type="date" value={form.onset} onChange={(e) => set("onset", e.target.value)} className={`mt-1 ${inputCls}`} />
         </label>
-        <label className="text-[11px] text-zinc-500">Initial WHO-UMC
+        <label className="text-[11px] text-[#4A5A4F]">Initial WHO-UMC
           <select value={form.whoUmc} onChange={(e) => set("whoUmc", e.target.value)} className={`mt-1 ${inputCls}`}>
             <option>Possible</option><option>Probable</option><option>Certain</option><option>Unlikely</option><option>Unassessable</option>
           </select>
         </label>
       </div>
-      <label className="mt-2.5 block text-[11px] text-zinc-500">Event term (as reported)
+      <label className="mt-2.5 block text-[11px] text-[#4A5A4F]">Event term (as reported)
         <input value={form.term} onChange={(e) => set("term", e.target.value)} placeholder="e.g. ALT 4x ULN with fatigue" className={`mt-1 ${inputCls}`} />
       </label>
-      <label className="mt-2.5 block text-[11px] text-zinc-500">Narrative (optional)
+      <label className="mt-2.5 block text-[11px] text-[#4A5A4F]">Narrative (optional)
         <textarea value={form.narrative} onChange={(e) => set("narrative", e.target.value)} rows={2} className={`mt-1 ${inputCls}`} />
       </label>
       <div className="mt-3 flex items-center gap-3">
         <button onClick={submit} disabled={busy || !form.term || !form.participantId} className="btn disabled:opacity-50">
           {busy ? "Submitting…" : form.seriousness === "Serious" ? "Submit — start 24h clock" : "Submit report"}
         </button>
-        {msg && <span className={`text-[11px] ${msg.includes("recorded") ? "text-emerald-400" : "text-red-400"}`}>{msg}</span>}
+        {msg && <span className={`text-[11px] ${msg.includes("recorded") ? "text-[#2D5A3D]" : "text-[#A44A2A]"}`}>{msg}</span>}
       </div>
     </div>
   );

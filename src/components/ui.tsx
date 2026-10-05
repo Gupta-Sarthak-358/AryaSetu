@@ -7,10 +7,10 @@ export function Card({ className, children, id }: { className?: string; children
 
 export function CardTitle({ title, sub, right }: { title: string; sub?: string; right?: React.ReactNode }) {
   return (
-    <div className="mb-3 flex items-start justify-between gap-3 border-b border-[#222226] pb-3">
+    <div className="mb-3 flex items-start justify-between gap-3 border-b border-[#E3DED4] pb-3">
       <div>
-        <h3 className="text-[13px] font-semibold text-zinc-100">{title}</h3>
-        {sub && <p className="mt-0.5 text-[11px] text-zinc-500">{sub}</p>}
+        <h3 className="text-[14px] font-semibold text-[#1C2A21]">{title}</h3>
+        {sub && <p className="mt-0.5 text-[12px] text-[#4A5A4F]">{sub}</p>}
       </div>
       {right}
     </div>
@@ -20,21 +20,21 @@ export function CardTitle({ title, sub, right }: { title: string; sub?: string; 
 export type StatusKind = "ok" | "warn" | "crit" | "info" | "neutral" | "violet";
 
 const dotColor: Record<StatusKind, string> = {
-  ok: "bg-emerald-400",
-  warn: "bg-amber-400",
-  crit: "bg-red-400",
-  info: "bg-sky-400",
-  neutral: "bg-zinc-500",
-  violet: "bg-violet-400",
+  ok: "bg-[#2D5A3D]",
+  warn: "bg-[#B98A2F]",
+  crit: "bg-[#A44A2A]",
+  info: "bg-[#3E6B8C]",
+  neutral: "bg-[#7A887D]",
+  violet: "bg-[#6B5A8C]",
 };
 
 const textColor: Record<StatusKind, string> = {
-  ok: "text-emerald-400",
-  warn: "text-amber-400",
-  crit: "text-red-400",
-  info: "text-sky-400",
-  neutral: "text-zinc-400",
-  violet: "text-violet-400",
+  ok: "text-[#2D5A3D]",
+  warn: "text-[#8A6A1F]",
+  crit: "text-[#A44A2A]",
+  info: "text-[#3E6B8C]",
+  neutral: "text-[#4A5A4F]",
+  violet: "text-[#6B5A8C]",
 };
 
 export function Status({ kind = "neutral", label, className, live }: { kind?: StatusKind; label: string; className?: string; live?: boolean }) {
@@ -62,7 +62,7 @@ export function StatusAuto({ status, className, live }: { status: string; classN
 
 export function Badge({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <span className={cn("inline-flex items-center gap-1 rounded border border-[#2d2d33] bg-[#1a1a1e] px-1.5 py-0.5 text-[10.5px] font-medium text-zinc-400", className)}>
+    <span className={cn("inline-flex items-center gap-1 rounded border border-[#E3DED4] bg-[#F3EFE5] px-1.5 py-0.5 text-[10.5px] font-medium text-[#4A5A4F]", className)}>
       {children}
     </span>
   );
@@ -70,10 +70,10 @@ export function Badge({ children, className }: { children: React.ReactNode; clas
 
 export function KpiTile({ label, value, sub, kind = "neutral", href }: { label: string; value: string; sub?: React.ReactNode; kind?: StatusKind; href?: string }) {
   const inner = (
-    <div className="panel p-3.5 transition-colors hover:border-[#2d2d33]">
+    <div className="panel p-3.5 transition-all hover:-translate-y-px hover:border-[#C9C2B2] hover:shadow-[0_2px_8px_rgba(28,42,33,0.1)] active:translate-y-0 active:bg-[#F3EFE5]">
       <p className="section-label">{label}</p>
-      <p className={cn("num mt-2 text-[24px] leading-none font-semibold", kind === "crit" ? "text-red-400" : kind === "warn" ? "text-amber-400" : kind === "ok" ? "text-emerald-400" : "text-zinc-50")}>{value}</p>
-      {sub && <div className="mt-2 text-[11px] text-zinc-500">{sub}</div>}
+      <p className={cn("num mt-2 text-[24px] leading-none font-semibold", kind === "crit" ? "text-[#A44A2A]" : kind === "warn" ? "text-[#8A6A1F]" : kind === "ok" ? "text-[#2D5A3D]" : "text-[#1C2A21]")}>{value}</p>
+      {sub && <div className="mt-2 text-[11px] text-[#4A5A4F]">{sub}</div>}
     </div>
   );
   return href ? <Link href={href}>{inner}</Link> : inner;
@@ -81,21 +81,21 @@ export function KpiTile({ label, value, sub, kind = "neutral", href }: { label: 
 
 export function ProgressBar({ value, max, kind = "ok", className }: { value: number; max: number; kind?: StatusKind; className?: string }) {
   const pctVal = Math.min(100, Math.round((value / max) * 100));
-  const colors: Record<StatusKind, string> = { ok: "bg-emerald-500", warn: "bg-amber-500", crit: "bg-red-500", info: "bg-sky-500", neutral: "bg-zinc-500", violet: "bg-violet-500" };
+  const colors: Record<StatusKind, string> = { ok: "bg-[#2D5A3D]", warn: "bg-[#B98A2F]", crit: "bg-[#A44A2A]", info: "bg-[#3E6B8C]", neutral: "bg-[#7A887D]", violet: "bg-[#6B5A8C]" };
   return (
-    <div className={cn("h-[4px] w-full overflow-hidden rounded-sm bg-white/8", className)}>
+    <div className={cn("h-[4px] w-full overflow-hidden rounded-sm bg-[#E3DED4]", className)}>
       <div className={cn("h-full rounded-sm", colors[kind])} style={{ width: `${pctVal}%` }} />
     </div>
   );
 }
 
-export function PageHeader({ code, title, sub, right }: { code: string; title: string; sub?: string; right?: React.ReactNode }) {
+export function PageHeader({ code, title, sub, right }: { code?: string; title: string; sub?: string; right?: React.ReactNode }) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-3">
       <div>
-        <p className="font-mono2 text-[10.5px] tracking-[0.14em] text-zinc-500 uppercase">{code}</p>
-        <h1 className="mt-1 text-[19px] font-semibold tracking-tight text-zinc-50">{title}</h1>
-        {sub && <p className="mt-0.5 text-[12px] text-zinc-500">{sub}</p>}
+        {code && <p className="font-mono2 text-[10.5px] tracking-[0.08em] text-[#7A887D] uppercase">{code}</p>}
+        <h1 className="display mt-1 text-[24px] font-medium text-[#1C2A21]">{title}</h1>
+        {sub && <p className="mt-0.5 max-w-2xl text-[13px] text-[#4A5A4F]">{sub}</p>}
       </div>
       {right}
     </div>

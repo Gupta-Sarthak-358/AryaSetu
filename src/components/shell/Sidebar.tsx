@@ -31,44 +31,44 @@ const nav = [
 export function Sidebar() {
   const pathname = usePathname();
   return (
-    <aside className="fixed inset-y-0 left-0 z-40 flex w-[208px] flex-col border-r border-[#1c1c20] bg-[#0d0d0f]">
-      <Link href="/" className="flex items-center gap-2.5 border-b border-[#1c1c20] px-4 py-4">
-        <span className="flex h-7 w-7 items-center justify-center rounded-[5px] bg-emerald-500/15 text-emerald-400">
+    <aside className="fixed inset-y-0 left-0 z-40 flex w-[208px] flex-col border-r border-[#E3DED4] bg-[#FFFFFF]">
+      <Link href="/" className="flex items-center gap-2.5 border-b border-[#E3DED4] px-4 py-4">
+        <span className="flex h-7 w-7 items-center justify-center rounded-[5px] bg-[#2D5A3D]/10 text-[#2D5A3D]">
           <Activity size={15} strokeWidth={2.2} />
         </span>
         <span>
-          <span className="block text-[13px] leading-none font-semibold tracking-wide text-zinc-50">ARYASETU</span>
-          <span className="mt-1 block text-[9px] tracking-[0.16em] text-zinc-600 uppercase">AIIA · National CTMS</span>
+          <span className="block text-[13px] leading-none font-semibold tracking-wide text-[#1C2A21]">ARYASETU</span>
+          <span className="mt-1 block text-[9px] tracking-[0.08em] text-[#7A887D] uppercase">AIIA · National CTMS</span>
         </span>
       </Link>
-      <nav className="flex-1 space-y-px overflow-y-auto px-2 py-3 scrollbar-thin">
-        <p className="section-label px-2 pt-1 pb-2">Modules</p>
+      <nav className="flex-1 space-y-px overflow-y-auto px-2 py-3 scrollbar-thin" aria-label="Primary">
         {nav.map((item) => {
           const active = pathname === item.href || pathname.startsWith(item.href + "/");
           return (
             <Link
               key={item.href}
               href={item.href}
+              aria-current={active ? "page" : undefined}
               className={cn(
-                "group flex items-center gap-2.5 rounded-[5px] px-2.5 py-[7px] text-[12.5px] transition-colors",
+                "group flex items-center gap-2.5 rounded-[5px] px-2.5 py-[10px] text-[13px] transition-colors",
                 active
-                  ? "bg-[#1a1a1e] font-medium text-zinc-50"
-                  : "text-zinc-500 hover:bg-[#141416] hover:text-zinc-300"
+                  ? "bg-[#E9E0C8] font-medium text-[#1C2A21]"
+                  : "text-[#4A5A4F] hover:bg-[#EFE8D6] hover:text-[#1C2A21] active:bg-[#E7DCC2]"
               )}
             >
-              <item.icon size={14} strokeWidth={1.8} className={active ? "text-emerald-400" : "text-zinc-600 group-hover:text-zinc-400"} />
+              <item.icon size={15} strokeWidth={1.8} className={active ? "text-[#2D5A3D]" : "text-[#7A887D] group-hover:text-[#4A5A4F]"} />
               <span className="flex-1">{item.label}</span>
               {item.href === "/safety" && (
-                <span className="flex h-4 min-w-4 items-center justify-center rounded-sm bg-red-500/15 px-1 font-mono2 text-[10px] text-red-400">1</span>
+                <span className="flex h-4 min-w-4 items-center justify-center rounded-sm bg-[#A44A2A]/10 px-1 font-mono2 text-[10px] text-[#A44A2A]">1</span>
               )}
-              {active && <span className="h-3.5 w-[2px] rounded-full bg-emerald-400" />}
+              {active && <span className="h-3.5 w-[2px] rounded-full bg-[#2D5A3D]" />}
             </Link>
           );
         })}
       </nav>
-      <div className="border-t border-[#1c1c20] px-4 py-3">
-        <p className="text-[9.5px] leading-relaxed tracking-wider text-zinc-600 uppercase">
-          Synthetic demo data only<br />No real patient data
+      <div className="border-t border-[#E3DED4] px-4 py-3">
+        <p className="text-[10px] leading-relaxed text-[#7A887D]">
+          Demo build · synthetic data only
         </p>
       </div>
     </aside>

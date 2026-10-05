@@ -40,21 +40,21 @@ function LoginInner() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center bg-[#0a0a0b] px-6 py-12">
-      <Link href="/" className="mb-8 flex items-center gap-2.5">
-        <span className="flex h-8 w-8 items-center justify-center rounded-[5px] bg-emerald-500/15 text-emerald-400">
+    <div className="flex min-h-screen flex-col items-center bg-[#FAF9F6] px-6 py-12">
+      <Link href="/" className="mb-8 flex items-center gap-2.5" aria-label="AryaSetu home">
+        <span className="flex h-8 w-8 items-center justify-center rounded-[5px] bg-[#2D5A3D]/10 text-[#2D5A3D]">
           <Activity size={16} />
         </span>
         <span>
-          <span className="block text-[15px] leading-none font-semibold tracking-wide text-zinc-50">ARYASETU</span>
-          <span className="mt-1 block text-[9px] tracking-[0.16em] text-zinc-600 uppercase">Ministry of Ayush · AIIA</span>
+          <span className="block text-[15px] leading-none font-semibold tracking-wide text-[#1C2A21]">ARYASETU</span>
+          <span className="mt-1 block text-[9px] tracking-[0.08em] text-[#7A887D] uppercase">Ministry of Ayush · AIIA</span>
         </span>
       </Link>
 
       <div className="w-full max-w-2xl">
-        <h1 className="text-[22px] font-semibold tracking-tight text-zinc-50">Sign in</h1>
-        <p className="mt-1.5 text-[12.5px] text-zinc-500">
-          Real session authentication (Argon2id + HttpOnly cookie). Demo password for all personas: <code className="font-mono2 text-emerald-400">AryaSetu@123</code>
+        <h1 className="display text-[26px] font-medium text-[#1C2A21]">Sign in</h1>
+        <p className="mt-1.5 text-[13px] leading-relaxed text-[#4A5A4F]">
+          Session sign-in (Argon2id, HttpOnly cookie). Demo password for every persona: <code className="rounded bg-[#F3EFE5] px-1 font-mono2 text-[#2D5A3D]">AryaSetu@123</code>
         </p>
 
         <form
@@ -63,57 +63,59 @@ function LoginInner() {
             const p = personas.find((x) => x.email === email);
             doLogin(email, password, p?.role ?? "Admin");
           }}
-          className="mt-5 grid gap-2 rounded-md border border-[#222226] bg-[#121214] p-4 sm:grid-cols-[1fr_1fr_auto]"
+          className="mt-5 grid gap-2 rounded-lg border border-[#E3DED4] bg-[#FFFFFF] p-4 sm:grid-cols-[1fr_1fr_auto]"
         >
           <input
             type="email"
             required
             placeholder="email — e.g. pv@aryasetu.in"
+            aria-label="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="rounded-[5px] border border-[#2d2d33] bg-[#0d0d0f] px-3 py-2 text-[12.5px] text-zinc-200 outline-none placeholder:text-zinc-600 focus:border-[#3f3f46]"
+            className="min-h-[44px] rounded-[6px] border border-[#E3DED4] bg-[#FAF9F6] px-3 py-2 text-[13px] text-[#1C2A21] outline-none placeholder:text-[#7A887D] focus:border-[#2D5A3D]"
           />
           <input
             type="password"
             required
             placeholder="password"
+            aria-label="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="rounded-[5px] border border-[#2d2d33] bg-[#0d0d0f] px-3 py-2 text-[12.5px] text-zinc-200 outline-none placeholder:text-zinc-600 focus:border-[#3f3f46]"
+            className="min-h-[44px] rounded-[6px] border border-[#E3DED4] bg-[#FAF9F6] px-3 py-2 text-[13px] text-[#1C2A21] outline-none placeholder:text-[#7A887D] focus:border-[#2D5A3D]"
           />
           <button type="submit" disabled={busy} className="btn justify-center disabled:opacity-50">
             {busy ? "Signing in…" : "Sign in"}
           </button>
         </form>
-        {error && <p className="mt-2 text-[12px] text-red-400">{error}</p>}
+        {error && <p role="alert" className="mt-2 text-[12px] text-[#A44A2A]">{error}</p>}
 
-        <p className="section-label mt-8 mb-3">Or pick a demo persona</p>
-        <div className="overflow-hidden rounded-md border border-[#222226]">
+        <h2 className="mt-8 mb-3 text-[14px] font-semibold text-[#1C2A21]">Or pick a demo persona</h2>
+        <div className="overflow-hidden rounded-lg border border-[#E3DED4] bg-[#FFFFFF]">
           {personas.map((p, i) => (
             <button
               key={p.role}
               disabled={busy}
               onClick={() => doLogin(p.email, "AryaSetu@123", p.role)}
-              className={`group grid w-full grid-cols-[1fr_auto] items-center gap-x-4 px-4 py-3 text-left transition-colors hover:bg-[#17171a] disabled:opacity-50 ${i > 0 ? "border-t border-[#1c1c20]" : ""} ${i % 2 === 0 ? "bg-[#101012]" : "bg-[#0d0d0f]"}`}
+              className={`group grid min-h-[44px] w-full grid-cols-[1fr_auto] items-center gap-x-4 px-4 py-3 text-left transition-colors hover:bg-[#F3EFE5] active:bg-[#E9E2D2] disabled:opacity-50 ${i > 0 ? "border-t border-[#E3DED4]" : ""}`}
             >
               <span className="min-w-0">
                 <span className="flex flex-wrap items-center gap-2">
-                  <span className="text-[13px] font-medium text-zinc-100">{p.name}</span>
-                  <span className="rounded-[3px] border border-[#2d2d33] px-1.5 py-px font-mono2 text-[9.5px] tracking-wider text-emerald-400 uppercase">{p.role}</span>
+                  <span className="text-[13px] font-medium text-[#1C2A21]">{p.name}</span>
+                  <span className="rounded-full border border-[#E3DED4] bg-[#F3EFE5] px-1.5 py-px font-mono2 text-[9.5px] text-[#2D5A3D]">{p.role}</span>
                 </span>
-                <span className="mt-0.5 block truncate text-[11.5px] text-zinc-500">{roleDescriptions[p.role]} · {p.org}</span>
+                <span className="mt-0.5 block truncate text-[11.5px] text-[#4A5A4F]">{roleDescriptions[p.role]} · {p.org}</span>
               </span>
               <span className="flex items-center gap-3">
-                <span className="font-mono2 text-[10px] text-zinc-600">{p.studies[0] === "ALL" ? "ALL STUDIES" : `${p.studies.length} STUDIES`}</span>
-                <ArrowRight size={13} className="text-zinc-700 transition-all group-hover:translate-x-0.5 group-hover:text-emerald-400" />
+                <span className="font-mono2 text-[10px] text-[#7A887D]">{p.studies[0] === "ALL" ? "All studies" : `${p.studies.length} studies`}</span>
+                <ArrowRight size={13} className="text-[#C9C2B2] transition-all group-hover:translate-x-0.5 group-hover:text-[#2D5A3D]" />
               </span>
             </button>
           ))}
         </div>
 
-        <div className="mt-8 flex items-center justify-center gap-2 font-mono2 text-[10px] tracking-wider text-zinc-600 uppercase">
-          <ShieldCheck size={12} className="text-emerald-500" />
-          Synthetic data only · every login is written to the audit chain
+        <div className="mt-8 flex items-center justify-center gap-2 text-[11px] text-[#7A887D]">
+          <ShieldCheck size={12} className="text-[#2D5A3D]" />
+          Synthetic data only · sign-ins are written to the audit chain
         </div>
       </div>
     </div>
