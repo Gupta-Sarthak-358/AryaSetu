@@ -43,6 +43,7 @@ export default function InteropPage() {
             ["/api/export/sdtm/dm", "SDTM DM", "Demographics, all studies"],
             ["/api/export/sdtm/ae", "SDTM AE", "Full AE domain from register"],
             ["/api/export/sdtm/ex", "SDTM EX", "Exposure with batch lots"],
+            ["/api/export/xpt/ae", "AE.xpt", "Binary SAS Transport v5 (draft)"],
             ["/api/export/adam/adsl", "ADaM ADSL", "Subject-level analysis set"],
             ["/api/export/metadata/define-xml", "Define-XML 2.1", "Dataset metadata"],
             ["/api/export/metadata/odm", "ODM 1.3.2", "CDASH instruments (draft)"],

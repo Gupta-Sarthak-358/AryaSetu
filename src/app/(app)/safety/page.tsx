@@ -7,10 +7,11 @@ import { NewEventForm } from "@/components/NewEventForm";
 import { aeByWeek } from "@/lib/data/ops";
 import { getAdverseEvents, getBatches, getSaes, getSites, getStudies } from "@/lib/server/repo";
 import { computeSignalRows } from "@/lib/server/signal";
+import { computeExposureRows } from "@/lib/server/exposure";
 import { countdown, fmtDate } from "@/lib/utils";
 
 export default async function SafetyPage() {
-  const [adverseEvents, saes, studies, sites, batches, rorRows] = await Promise.all([getAdverseEvents(), getSaes(), getStudies(), getSites(), getBatches(), computeSignalRows()]);
+  const [adverseEvents, saes, studies, sites, batches, rorRows, exposureRows] = await Promise.all([getAdverseEvents(), getSaes(), getStudies(), getSites(), getBatches(), computeSignalRows(), computeExposureRows()]);
   const safetySummary = {
     openSaes: saes.filter((s) => s.status === "Open").length,
     signalReview: 1,
@@ -121,6 +122,44 @@ export default async function SafetyPage() {
           </p>
         </Card>
       </div>
+
+      <Card>
+        <CardTitle
+          title="Exposure-adjusted event rates"
+          sub="Events per 1,000 person-years on each product — computed from batch dosing records (first dose → today)"
+          right={<Badge>PERSON-TIME</Badge>}
+        />
+        <table className="w-full text-left text-[12px]">
+          <thead>
+            <tr className="border-b border-[#222226] text-[10px] tracking-wider text-zinc-500 uppercase">
+              <th className="pb-2 pr-4 font-medium">Product</th>
+              <th className="pb-2 pr-4 text-right font-medium">Dosed</th>
+              <th className="pb-2 pr-4 text-right font-medium">Person-yrs</th>
+              <th className="pb-2 pr-4 text-right font-medium">Events</th>
+              <th className="pb-2 pr-4 text-right font-medium">Serious</th>
+              <th className="pb-2 pr-4 text-right font-medium">Rate /1,000 PY</th>
+              <th className="pb-2 font-medium">95% CI</th>
+            </tr>
+          </thead>
+          <tbody>
+            {exposureRows.map((r) => (
+              <tr key={r.product} className={`row-hover border-b border-[#1c1c20] last:border-0 ${r.ratePer1000PY > 500 ? "bg-red-500/[0.04]" : ""}`}>
+                <td className="py-2 pr-4 max-w-[240px] truncate text-zinc-300">{r.product}</td>
+                <td className="py-2 pr-4 text-right num text-zinc-400">{r.dosed}</td>
+                <td className="py-2 pr-4 text-right num text-zinc-400">{r.personYears}</td>
+                <td className="py-2 pr-4 text-right num text-zinc-300">{r.events}</td>
+                <td className={`py-2 pr-4 text-right num ${r.serious > 0 ? "font-semibold text-red-400" : "text-zinc-400"}`}>{r.serious}</td>
+                <td className={`py-2 pr-4 text-right num font-semibold ${r.ratePer1000PY > 500 ? "text-red-400" : "text-zinc-300"}`}>{r.ratePer1000PY}</td>
+                <td className="py-2 num text-[11px] text-zinc-500">[{r.ciLow} – {r.ciHigh}]</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="mt-2.5 text-[10.5px] leading-relaxed text-zinc-600">
+          Rates contextualise counts: 3 hepatic events mean something very different at 6 person-months than at 600 person-years.
+          Person-time is computed per batch from first-dose dates; CI is normal-approximation Poisson.
+        </p>
+      </Card>
 
       <Card>
         <CardTitle
