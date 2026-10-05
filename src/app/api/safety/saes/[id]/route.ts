@@ -11,6 +11,20 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const sae = await getSae(id);
     if (!sae) return Response.json({ error: "Not found" }, { status: 404 });
 
+    const WHO_UMC = ["Certain", "Probable", "Possible", "Unlikely", "Unassessable"];
+    if (body.whoUmc !== undefined && !WHO_UMC.includes(body.whoUmc)) {
+      return Response.json({ error: `whoUmc must be one of: ${WHO_UMC.join(", ")}` }, { status: 400 });
+    }
+    if (body.naranjo !== undefined && (typeof body.naranjo !== "number" || body.naranjo < -4 || body.naranjo > 13)) {
+      return Response.json({ error: "naranjo must be a number between -4 and 13" }, { status: 400 });
+    }
+    if (body.status !== undefined && !["Open", "Initial Reported", "Full Reported", "EC Opinion", "Closed"].includes(body.status)) {
+      return Response.json({ error: "invalid status" }, { status: 400 });
+    }
+    if (body.expectedness !== undefined && !["Expected", "Unexpected"].includes(body.expectedness)) {
+      return Response.json({ error: "expectedness must be Expected or Unexpected" }, { status: 400 });
+    }
+
     const patch: Record<string, unknown> = {};
     if (body.whoUmc) patch.whoUmc = body.whoUmc;
     if (typeof body.naranjo === "number") patch.naranjo = body.naranjo;

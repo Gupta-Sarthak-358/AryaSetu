@@ -17,8 +17,8 @@ export default async function SafetyPage() {
     signalReview: 1,
     medianReportHours: 7.5,
   };
-  const openSae = saes.find((s) => s.status === "Open")!;
-  const cd = countdown(openSae.initialDueAt);
+  const openSae = saes.find((s) => s.status === "Open");
+  const cd = openSae ? countdown(openSae.initialDueAt) : null;
   const studyById = (sid: string) => studies.find((s) => s.id === sid);
   const siteById = (sid: string) => sites.find((s) => s.id === sid);
 
@@ -39,6 +39,7 @@ export default async function SafetyPage() {
         batches={batches.map((b) => ({ id: b.id, product: b.product }))}
       />
 
+      {openSae && cd ? (
       <Link href={`/safety/${openSae.id}`}>
         <div className="panel relative overflow-hidden border-red-500/30 p-4 hover:border-red-500/50">
           <div className="absolute inset-y-0 left-0 w-[3px] bg-red-500" />
@@ -72,6 +73,7 @@ export default async function SafetyPage() {
           </p>
         </div>
       </Link>
+      ) : null}
 
       <div className="grid gap-3 xl:grid-cols-3">
         <Card>
@@ -214,7 +216,8 @@ export default async function SafetyPage() {
         <CardTitle title="SAE case register" sub="NDCT 2019 statutory tracking" />
         <div className="grid gap-2.5 md:grid-cols-3">
           {saes.map((s) => {
-            const st = studyById(s.studyId)!;
+            const st = studyById(s.studyId);
+            if (!st) return null;
             return (
               <Link key={s.id} href={`/safety/${s.id}`} className="panel-2 p-3.5 hover:border-[#3f3f46]">
                 <div className="flex items-center justify-between">

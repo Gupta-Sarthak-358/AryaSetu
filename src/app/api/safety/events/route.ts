@@ -34,6 +34,15 @@ export async function POST(req: Request) {
     for (const f of required) {
       if (!body[f]) return Response.json({ error: `Missing field: ${f}` }, { status: 400 });
     }
+    if (!["Serious", "Non-serious"].includes(body.seriousness)) {
+      return Response.json({ error: "seriousness must be Serious or Non-serious" }, { status: 400 });
+    }
+    if (!["Mild", "Moderate", "Severe"].includes(body.severity)) {
+      return Response.json({ error: "severity must be Mild, Moderate or Severe" }, { status: 400 });
+    }
+    if (isNaN(Date.parse(body.onset))) {
+      return Response.json({ error: "onset must be a valid date" }, { status: 400 });
+    }
     await assertStudyAccess(user, body.studyId);
     const study = await getStudy(body.studyId);
     if (!study) return Response.json({ error: "Unknown study" }, { status: 404 });

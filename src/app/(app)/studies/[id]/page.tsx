@@ -183,9 +183,10 @@ export default async function StudyDetailPage({ params }: { params: Promise<{ id
                 </tr>
               </thead>
               <tbody>
-                {study.sites.map((sid) => {
-                  const site = siteById(sid)!;
-                  return (
+              {study.sites.map((sid) => {
+                const site = siteById(sid);
+                if (!site) return null;
+                return (
                     <tr key={sid} className="row-hover border-b border-[#1c1c20] last:border-0">
                       <td className="py-2 pr-3">
                         <span className="block text-zinc-200">{site.name.split("—")[0]}</span>
