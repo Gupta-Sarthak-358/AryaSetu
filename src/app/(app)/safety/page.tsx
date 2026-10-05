@@ -4,11 +4,12 @@ import { Badge, Card, CardTitle, PageHeader, Status, StatusAuto } from "@/compon
 import { AeBars } from "@/components/charts";
 import { SafetyDisclaimer } from "@/components/SafetyDisclaimer";
 import { NewEventForm } from "@/components/NewEventForm";
+import { LiveSaeTimer } from "@/components/LiveSaeTimer";
 import { aeByWeek } from "@/lib/data/ops";
 import { getAdverseEvents, getBatches, getSaes, getSites, getStudies } from "@/lib/server/repo";
 import { computeSignalRows } from "@/lib/server/signal";
 import { computeExposureRows } from "@/lib/server/exposure";
-import { countdown, fmtDate } from "@/lib/utils";
+import { fmtDate } from "@/lib/utils";
 
 export default async function SafetyPage() {
   const [adverseEvents, saes, studies, sites, batches, rorRows, exposureRows] = await Promise.all([getAdverseEvents(), getSaes(), getStudies(), getSites(), getBatches(), computeSignalRows(), computeExposureRows()]);
@@ -18,7 +19,6 @@ export default async function SafetyPage() {
     medianReportHours: 7.5,
   };
   const openSae = saes.find((s) => s.status === "Open");
-  const cd = openSae ? countdown(openSae.initialDueAt) : null;
   const studyById = (sid: string) => studies.find((s) => s.id === sid);
   const siteById = (sid: string) => sites.find((s) => s.id === sid);
 
@@ -38,36 +38,34 @@ export default async function SafetyPage() {
         batches={batches.map((b) => ({ id: b.id, product: b.product }))}
       />
 
-      {openSae && cd ? (
+      {openSae ? (
       <Link href={`/safety/${openSae.id}`}>
-        <div className="panel relative overflow-hidden border-[#A44A2A]/40 p-4 hover:border-[#A44A2A]/60">
-          <div className="absolute inset-y-0 left-0 w-[3px] bg-[#A44A2A]" />
+        <div className="panel relative overflow-hidden border-[#A44A2A]/40 p-4 hover:border-[#A44A2A]/60 shadow-xs transition-all">
+          <div className="absolute inset-y-0 left-0 w-[4px] bg-[#A44A2A]" />
           <div className="flex flex-wrap items-center justify-between gap-4 pl-2">
             <div>
               <div className="flex flex-wrap items-center gap-2.5">
-                <AlertTriangle size={14} className="text-[#A44A2A]" />
+                <AlertTriangle size={15} className="text-[#A44A2A]" />
                 <span className="font-mono2 text-[15px] font-bold text-[#A44A2A]">{openSae.id}</span>
                 <StatusAuto status="Severe" />
                 <StatusAuto status="Unexpected" />
-                <Status kind="crit" label="Clock running" live />
+                <Status kind="crit" label="Statutory Clock Running" live />
               </div>
-              <p className="mt-1.5 max-w-2xl text-[13px] text-[#1C2A21]">{openSae.term}</p>
-              <p className="mt-1 font-mono2 text-[10.5px] text-[#7A887D] uppercase">
+              <p className="mt-1.5 max-w-2xl text-[13.5px] font-medium text-[#1C2A21]">{openSae.term}</p>
+              <p className="mt-1 font-mono2 text-[11px] text-[#7A887D] uppercase">
                 {openSae.studyId} · {siteById(openSae.siteId)?.name.split("—")[0]} · {openSae.participantId} · BATCH {openSae.batchId}
               </p>
             </div>
             <div className="text-right">
-              <p className="flex items-center justify-end gap-1.5 text-[10px] font-semibold tracking-wider text-[#A44A2A] uppercase">
-                <Clock3 size={11} /> NDCT 24h initial report
+              <p className="flex items-center justify-end gap-1.5 text-[10px] font-bold tracking-wider text-[#A44A2A] uppercase">
+                <Clock3 size={12} /> NDCT 24h statutory initial report
               </p>
-              <p className="num mt-1 text-[34px] leading-none font-semibold text-[#A44A2A]">{cd.text}</p>
-              <p className="mt-0.5 text-[10.5px] text-[#7A887D]">{cd.overdue ? "Overdue — 24h limit breached" : "of the 24 hours left"}</p>
+              <div className="mt-1">
+                <LiveSaeTimer targetIso={openSae.initialDueAt} saeId={openSae.id} />
+              </div>
             </div>
           </div>
-          <div className="mt-3 ml-2 h-[4px] overflow-hidden rounded-sm bg-[#E3DED4]">
-            <div className="h-full w-[74%] rounded-sm bg-[#A44A2A]" />
-          </div>
-          <p className="mt-2 ml-2 text-[10.5px] text-[#7A887D]">
+          <p className="mt-2 ml-2 text-[11px] text-[#7A887D]">
             Awareness 02 Oct 21:12 IST → initial due 03 Oct 21:12 IST · chain: 14d full report → 30d EC opinion → 60d expert committee → 90d LA order → 30d payment
           </p>
         </div>

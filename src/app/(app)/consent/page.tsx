@@ -1,6 +1,7 @@
 import { Card, KpiTile, PageHeader, StatusAuto } from "@/components/ui";
 import { getConsentRecords } from "@/lib/server/repo";
 import { Lock, Languages, ShieldCheck, Video } from "lucide-react";
+import { AvConsentSimulator } from "@/components/AvConsentSimulator";
 
 export default async function ConsentPage() {
   const consentRecords = await getConsentRecords();
@@ -21,6 +22,8 @@ export default async function ConsentPage() {
         <KpiTile label="AV consents recorded" value={String(totalAv)} sub="Vulnerable subjects (NDCT)" />
         <KpiTile label="Identifier fields in schema" value="0" kind="ok" sub="Data minimisation by design" />
       </div>
+
+      <AvConsentSimulator />
 
       <Card className="p-0">
         <div className="border-b border-[#E3DED4] px-4 py-3">

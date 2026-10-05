@@ -30,7 +30,7 @@ describe("id generators", () => {
     await ensureBoot();
     const [ae, sae, q, d] = await Promise.all([nextAeId(), nextSaeId(), nextQueryId(), nextDeviationId()]);
     expect(ae).toMatch(/^AE-\d+$/);
-    expect(sae).toMatch(/^SAE-2026-0\d+$/);
+    expect(sae).toMatch(/^SAE-2026-\d{3}$/);
     expect(q).toMatch(/^DQ-\d{4}$/);
     expect(d).toMatch(/^DV-\d{4}$/);
     expect(parseInt(ae.replace("AE-", ""), 10)).toBeGreaterThanOrEqual(1042);

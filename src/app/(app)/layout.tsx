@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { RoleProvider } from "@/lib/role";
+import { ShellProvider } from "@/lib/shell-context";
 import { Sidebar } from "@/components/shell/Sidebar";
 import { Topbar } from "@/components/shell/Topbar";
 import { Ticker } from "@/components/shell/Ticker";
@@ -12,12 +13,14 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   if (!user) redirect("/login");
   return (
     <RoleProvider>
-      <Sidebar />
-      <div className="ml-[208px] flex min-h-screen flex-col">
-        <Topbar sessionName={user.name} sessionRole={user.role} />
-        <main className="flex-1 px-5 pt-5 pb-14">{children}</main>
-      </div>
-      <Ticker />
+      <ShellProvider>
+        <Sidebar />
+        <div className="flex min-h-screen flex-col transition-[margin] lg:ml-[216px]">
+          <Topbar sessionName={user.name} sessionRole={user.role} />
+          <main className="flex-1 px-4 pt-4 pb-16 sm:px-6">{children}</main>
+        </div>
+        <Ticker />
+      </ShellProvider>
     </RoleProvider>
   );
 }

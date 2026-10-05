@@ -2,9 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Download, FileSignature, Scale } from "lucide-react";
 import { Badge, Card, CardTitle, Status, StatusAuto } from "@/components/ui";
-import { TriagePanel } from "@/components/TriagePanel";
+import { NaranjoCalculator } from "@/components/NaranjoCalculator";
+import { LiveSaeTimer } from "@/components/LiveSaeTimer";
 import { getAdverseEvents, getBatch, getSae, getSite, getStudy } from "@/lib/server/repo";
-import { countdown, fmtDateTime } from "@/lib/utils";
+import { fmtDateTime } from "@/lib/utils";
 
 const stepStyles: Record<string, { ring: string; text: string }> = {
   done: { ring: "bg-[#2D5A3D]", text: "text-[#1C2A21]" },
@@ -26,21 +27,7 @@ export default async function SaeDetailPage({ params }: { params: Promise<{ id: 
   ]);
   if (!study || !site) notFound();
   const ae = adverseEvents.find((a) => a.id === sae.aeId);
-  const cd = countdown(sae.initialDueAt);
   const isOpen = sae.status === "Open";
-
-  const naranjoItems = [
-    { q: "Previous conclusive reports on this reaction?", score: 1, note: "Guduchi hepatotoxicity case series published" },
-    { q: "Event appeared after suspect drug given?", score: 2, note: "Week-8 LFT, dosing from 26-Jul" },
-    { q: "Improved on withdrawal (dechallenge)?", score: 1, note: "ALT declining post-withdrawal" },
-    { q: "Reaction reappeared on re-administration?", score: 0, note: "Rechallenge not attempted (ethically withheld)" },
-    { q: "Alternative causes (non-drug)?", score: 2, note: "Viral panel negative; no alcohol history" },
-    { q: "Reaction to placebo?", score: 0, note: "Not applicable — registry" },
-    { q: "Drug detected in toxic concentrations?", score: 0, note: "Not measured" },
-    { q: "Dose-response relationship?", score: 1, note: "Consistent with cumulative exposure" },
-    { q: "Similar reaction to same/similar drugs?", score: 0, note: "No prior history" },
-    { q: "Confirmed by objective evidence?", score: 1, note: "Serial LFT values on record" },
-  ];
 
   return (
     <div className="space-y-4">
@@ -51,7 +38,7 @@ export default async function SaeDetailPage({ params }: { params: Promise<{ id: 
         <span className="font-mono2 text-[10.5px] text-[#7A887D]">ICSR {sae.id} · demo record</span>
       </div>
 
-      <div className="panel border-[#A44A2A]/40 p-5">
+      <div className="panel border-[#A44A2A]/40 p-5 shadow-xs">
         <div className="flex flex-wrap items-start justify-between gap-5">
           <div className="max-w-2xl">
             <div className="flex flex-wrap items-center gap-2.5">
@@ -60,19 +47,21 @@ export default async function SaeDetailPage({ params }: { params: Promise<{ id: 
               <StatusAuto status={sae.severity} />
               <StatusAuto status={sae.expectedness} />
             </div>
-            <h1 className="mt-2 text-[15px] leading-snug font-medium text-[#1C2A21]">{sae.term}</h1>
-            <p className="mt-1.5 text-[12px] text-[#4A5A4F]">
+            <h1 className="mt-2 text-[16px] leading-snug font-semibold text-[#1C2A21]">{sae.term}</h1>
+            <p className="mt-1.5 text-[12.5px] text-[#4A5A4F]">
               {study.id} — {study.shortTitle} · {site.name} · Participant {sae.participantId} (synthetic)
-              {batch && <> · Suspect product: <Link href="/batches" className="text-[#2D5A3D] hover:text-[#22452F]">{batch.product}, Batch {batch.id}</Link></>}
+              {batch && <> · Suspect product: <Link href="/batches" className="text-[#2D5A3D] font-medium hover:text-[#22452F]">{batch.product}, Batch {batch.id}</Link></>}
             </p>
-            <p className="mt-1 font-mono2 text-[10px] tracking-wider text-[#7A887D] uppercase">
+            <p className="mt-1 font-mono2 text-[10.5px] tracking-wider text-[#7A887D] uppercase">
               Seriousness criteria: {sae.seriousnessCriteria.join(" · ")}
             </p>
           </div>
           {isOpen && (
-            <div className="rounded-md border border-[#A44A2A]/50 bg-[#A44A2A]/5 px-5 py-3.5 text-center">
-              <p className="text-[9.5px] font-bold tracking-wider text-[#A44A2A] uppercase">24h report clock{cd.overdue ? " · overdue" : ""}</p>
-              <p className="num mt-1 text-[38px] leading-none font-semibold text-[#A44A2A]">{cd.text}</p>
+            <div className="rounded-xl border border-[#A44A2A]/50 bg-[#A44A2A]/5 px-5 py-3.5 text-right">
+              <p className="text-[10px] font-bold tracking-wider text-[#A44A2A] uppercase">NDCT 24h statutory clock</p>
+              <div className="mt-1">
+                <LiveSaeTimer targetIso={sae.initialDueAt} saeId={sae.id} />
+              </div>
               <p className="mt-1 font-mono2 text-[10px] text-[#4A5A4F]">DUE {fmtDateTime(sae.initialDueAt)}</p>
             </div>
           )}
@@ -111,35 +100,13 @@ export default async function SaeDetailPage({ params }: { params: Promise<{ id: 
         </div>
       </Card>
 
-      <div className="grid gap-3 xl:grid-cols-2">
-        <div className="space-y-3">
-        <Card>
-          <CardTitle           title="Causality" sub="WHO-UMC category with Naranjo worksheet" />
-          <div className="mb-4 grid grid-cols-2 gap-2">
-            <div className="rounded-[5px] border border-[#B98A2F]/40 bg-[#B98A2F]/5 p-3 text-center">
-              <p className="section-label">WHO-UMC</p>
-              <p className="mt-1 text-[16px] font-semibold text-[#8A6A1F]">{sae.whoUmc}</p>
-            </div>
-            <div className="rounded-[5px] border border-[#2D5A3D]/40 bg-[#2D5A3D]/5 p-3 text-center">
-              <p className="section-label">Naranjo score</p>
-              <p className="num mt-1 text-[16px] font-semibold text-[#2D5A3D]">{sae.naranjo} / 13 · Probable</p>
-            </div>
-          </div>
-          <div className="space-y-1">
-            {naranjoItems.map((n, i) => (
-              <div key={i} className="flex items-center gap-3 rounded-[4px] bg-[#F3EFE5] px-2.5 py-1.5 text-[11px]">
-                <span className={`num w-6 shrink-0 text-center font-semibold ${n.score > 0 ? "text-[#2D5A3D]" : "text-[#C9C2B2]"}`}>
-                  {n.score > 0 ? `+${n.score}` : "0"}
-                </span>
-                <div className="min-w-0">
-                  <p className="truncate text-[#1C2A21]">{n.q}</p>
-                  <p className="truncate text-[10px] text-[#7A887D]">{n.note}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Card>
-        <TriagePanel saeId={sae.id} whoUmc={sae.whoUmc} naranjo={sae.naranjo} />
+      <div className="grid gap-4 xl:grid-cols-2">
+        <div>
+          <NaranjoCalculator
+            saeId={sae.id}
+            initialWhoUmc={sae.whoUmc}
+            initialNaranjo={sae.naranjo}
+          />
         </div>
 
         <div className="space-y-3">

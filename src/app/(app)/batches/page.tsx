@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { ArrowRight, FlaskConical, PackageCheck, TriangleAlert, Users } from "lucide-react";
+import { FlaskConical, PackageCheck, TriangleAlert, Users } from "lucide-react";
 import { Badge, Card, CardTitle, PageHeader, Status, StatusAuto } from "@/components/ui";
 import { getAdverseEvents, getBatches, getSites } from "@/lib/server/repo";
 import { fmtDate } from "@/lib/utils";
+import { BatchTraceFlow } from "@/components/BatchTraceFlow";
 
 export default async function BatchesPage() {
   const [batches, adverseEvents, sites] = await Promise.all([getBatches(), getAdverseEvents(), getSites()]);
@@ -151,13 +152,8 @@ export default async function BatchesPage() {
           </div>
         </div>
 
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-1.5 font-mono2 text-[10px] tracking-wider uppercase">
-          {["Manufacture + QC", "Distribution", "Administration", "Safety outcome", "Regulatory action"].map((s, i) => (
-            <span key={s} className="flex items-center gap-1.5">
-              {i > 0 && <ArrowRight size={10} className="text-[#C9C2B2]" />}
-              <span className={`rounded-[3px] border px-2 py-1 ${i === 3 ? "border-[#A44A2A]/40 text-[#A44A2A]" : "border-[#E3DED4] text-[#4A5A4F]"}`}>{s}</span>
-            </span>
-          ))}
+        <div className="mt-5">
+          <BatchTraceFlow batchId={focus.id} />
         </div>
       </div>
 

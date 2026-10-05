@@ -14,8 +14,8 @@ export async function Ticker() {
   const items = [...tickerEvents, ...tickerEvents];
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[#E3DED4] bg-[#F3EFE5]">
-      <div className="ml-[208px] flex items-center overflow-hidden">
-        <span className="z-10 shrink-0 border-r border-[#E3DED4] bg-[#F3EFE5] px-4 py-[7px] text-[11px] font-semibold text-[#4A5A4F]">
+      <div className="flex items-center overflow-hidden transition-[margin] lg:ml-[216px]">
+        <span className="z-10 shrink-0 border-r border-[#E3DED4] bg-[#F3EFE5] px-3.5 py-[7px] text-[11px] font-semibold text-[#4A5A4F]">
           Latest events
         </span>
         <div className="ticker-track">

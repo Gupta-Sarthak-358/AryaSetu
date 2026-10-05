@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Badge, Card, CardTitle, KpiTile, PageHeader, Status, StatusAuto } from "@/components/ui";
 import { getStudies } from "@/lib/server/repo";
 import { fmtDate } from "@/lib/utils";
+import { CtriSubmissionModal } from "@/components/CtriSubmissionModal";
 
 export default async function RegulatoryPage() {
   const studies = await getStudies();
@@ -21,6 +22,8 @@ export default async function RegulatoryPage() {
         <KpiTile label="IEC approvals expiring <45d" value={String(expiring.length)} kind="warn" sub={expiring.map((s) => s.id).join(", ")} />
         <KpiTile label="CTRI compliance" value="96%" kind="ok" sub="All registered before first enrolment" />
       </div>
+
+      <CtriSubmissionModal studyId="AYU-031" />
 
       <Card className="p-0">
         <div className="border-b border-[#E3DED4] px-4 py-3">

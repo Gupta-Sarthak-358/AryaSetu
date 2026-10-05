@@ -67,7 +67,7 @@ export default function Home() {
           <div className="hidden items-center gap-6 text-[13px] text-[#4A5A4F] md:flex">
             <a href="#platform" className="hover:text-[#1C2A21]">Platform</a>
             <a href="#roles" className="hover:text-[#1C2A21]">Roles</a>
-            <a href="#docs" className="hover:text-[#1C2A21]">Documentation</a>
+            <Link href="/docs" className="hover:text-[#1C2A21]">Documentation</Link>
           </div>
           <div className="ml-auto flex items-center gap-2.5">
             <Link href="/login" className="btn-outline">Sign in</Link>
@@ -171,9 +171,9 @@ export default function Home() {
           <p className="mt-1.5 text-[13px] text-[#4A5A4F]">Role guides, compliance maps and export references.</p>
           <div className="mt-6 grid gap-3 md:grid-cols-3">
             {[
-              { title: "Start here", links: [["Platform overview", "/#platform"], ["10-minute quick start", "/login"], ["Demo walkthrough", "/dashboard"], ["Synthetic data policy", "/consent"]] },
-              { title: "For trial staff", links: [["Guides for all 7 roles", "/admin"], ["KPI and alert setup", "/dashboard"], ["FHIR R4 reference", "/interop"], ["Batch traceability notes", "/batches"]] },
-              { title: "For reviewers", links: [["GCP-ASU alignment map", "/regulatory"], ["NDCT 2019 SAE timelines", "/safety"], ["DPDP privacy controls", "/consent"], ["CTRI reporting checklist", "/regulatory"]] },
+              { title: "Start here", links: [["Platform overview", "/docs/platform-overview"], ["10-minute quick start", "/docs/quick-start"], ["Demo walkthrough", "/docs/demo-walkthrough"], ["Synthetic data policy", "/docs/synthetic-data-policy"]] },
+              { title: "For trial staff", links: [["Guides for all 7 roles", "/docs/role-guides"], ["KPI and alert setup", "/docs/kpi-alerts"], ["FHIR R4 reference", "/docs/fhir-reference"], ["Batch traceability notes", "/docs/batch-traceability"]] },
+              { title: "For reviewers", links: [["GCP-ASU alignment map", "/docs/gcp-asu-map"], ["NDCT 2019 SAE timelines", "/docs/ndct-timelines"], ["DPDP privacy controls", "/docs/dpdp-controls"], ["CTRI reporting checklist", "/docs/ctri-checklist"]] },
             ].map((col) => (
               <div key={col.title} className="panel p-5">
                 <h3 className="text-[13.5px] font-semibold text-[#1C2A21]">{col.title}</h3>
