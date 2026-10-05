@@ -65,9 +65,15 @@ export default async function StudyDetailPage({ params }: { params: Promise<{ id
           ) : <span className="text-[#C9C2B2]">—</span>}
         </div>
         <div className="flex gap-2">
-          <span className="btn-outline cursor-pointer"><Download size={12} /> JSON</span>
-          <span className="btn-outline cursor-pointer"><Download size={12} /> CSV</span>
-          <span className="btn cursor-pointer"><FileText size={12} /> Open EDC workspace</span>
+          <a href={`/api/studies/${study.id}`} target="_blank" className="btn-outline">
+            <Download size={12} /> JSON
+          </a>
+          <a href={`/api/export/sdtm/dm`} className="btn-outline">
+            <Download size={12} /> SDTM CSV
+          </a>
+          <a href={`#quality`} className="btn">
+            <FileText size={12} /> Query & EDC Records
+          </a>
         </div>
       </div>
 
