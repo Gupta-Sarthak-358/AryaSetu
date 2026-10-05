@@ -56,13 +56,28 @@ body {
   background: var(--color-panel);
   border: 1px solid var(--color-line-strong);
   border-radius: 8px;
-  box-shadow: 0 1px 2px rgba(28, 42, 33, 0.06);
+  box-shadow: 0 1px 2px rgba(28, 42, 33, 0.05);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.panel-interactive {
+  background: var(--color-panel);
+  border: 1px solid var(--color-line-strong);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(28, 42, 33, 0.05);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.panel-interactive:hover {
+  border-color: var(--color-leaf);
+  box-shadow: 0 6px 16px -2px rgba(28, 42, 33, 0.08), 0 2px 4px -1px rgba(28, 42, 33, 0.04);
+  transform: translateY(-1.5px);
 }
 
 .panel-2 {
   background: var(--color-panel2);
   border: 1px solid var(--color-line);
   border-radius: 8px;
+  transition: border-color 0.15s ease;
 }
 
 .section-label {
@@ -76,11 +91,30 @@ body {
 /* Heavier ledger variant — intentional hierarchy variation (organic, not template) */
 .ledger-strong {
   border: 1px solid var(--color-line-strong);
-  border-top: 2px solid var(--color-leaf);
+  border-top: 2.5px solid var(--color-leaf);
 }
 
 .hairline-t { border-top: 1px solid var(--color-line); }
 .hairline-b { border-bottom: 1px solid var(--color-line); }
+
+.badge-interactive {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid var(--color-line);
+  background: #FFFFFF;
+  padding: 3px 10px;
+  font-family: var(--font-mono2);
+  font-size: 10.5px;
+  color: var(--color-ink2);
+  transition: all 0.15s ease;
+}
+.badge-interactive:hover {
+  border-color: var(--color-leaf);
+  color: var(--color-leaf-dark);
+  background: rgba(45, 90, 61, 0.05);
+  box-shadow: 0 1px 3px rgba(28, 42, 33, 0.06);
+}
 
 .btn {
   display: inline-flex;
@@ -95,11 +129,15 @@ body {
   border-radius: 6px;
   border: 1px solid var(--color-leaf);
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: all 0.15s ease;
 }
-.btn:hover { background: var(--color-leaf-dark); border-color: var(--color-leaf-dark); box-shadow: 0 1px 3px rgba(28, 42, 33, 0.25); }
+.btn:hover {
+  background: var(--color-leaf-dark);
+  border-color: var(--color-leaf-dark);
+  box-shadow: 0 2px 6px rgba(28, 42, 33, 0.22);
+}
 .btn:focus-visible { outline: 2px solid var(--color-leaf); outline-offset: 2px; }
-.btn:active { transform: translateY(0.5px); }
+.btn:active { transform: translateY(0.75px); }
 
 .btn-outline {
   display: inline-flex;
@@ -114,10 +152,16 @@ body {
   border-radius: 6px;
   border: 1px solid var(--color-line-strong);
   cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  transition: all 0.15s ease;
 }
-.btn-outline:hover { border-color: var(--color-leaf); color: var(--color-leaf-dark); background: rgba(45, 90, 61, 0.06); }
+.btn-outline:hover {
+  border-color: var(--color-leaf);
+  color: var(--color-leaf-dark);
+  background: rgba(45, 90, 61, 0.06);
+  box-shadow: 0 1px 3px rgba(28, 42, 33, 0.05);
+}
 .btn-outline:focus-visible { outline: 2px solid var(--color-leaf); outline-offset: 2px; }
+.btn-outline:active { transform: translateY(0.75px); }
 
 .btn-crit {
   display: inline-flex;
@@ -132,8 +176,9 @@ body {
   border-radius: 6px;
   border: 1px solid var(--color-clay);
   cursor: pointer;
+  transition: all 0.15s ease;
 }
-.btn-crit:hover { background: #8A3B22; }
+.btn-crit:hover { background: #8A3B22; border-color: #8A3B22; box-shadow: 0 2px 6px rgba(164, 74, 42, 0.25); }
 
 .row-hover { transition: background 0.12s ease; }
 .row-hover:hover { background: rgba(45, 90, 61, 0.08); }
