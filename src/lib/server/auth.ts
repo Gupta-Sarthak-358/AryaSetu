@@ -6,6 +6,7 @@ import { getDb } from "./db";
 import * as schema from "./schema";
 import { ensureBoot } from "./boot";
 import { appendAuditDirect } from "./audit";
+import { personas } from "../data/personas";
 
 const COOKIE = "aryasetu_sid";
 const SESSION_DAYS = 7;
@@ -64,6 +65,10 @@ export async function getSessionUser(): Promise<SessionUser | null> {
     .limit(1);
   const u = rows[0]?.user;
   if (!u) return null;
+  const fullAccess = personas.find((p) => p.role === u.role)?.studies[0] === "ALL";
+  if (fullAccess) {
+    return { id: u.id, name: u.name, designation: u.designation, org: u.org, email: u.email, role: u.role, studies: ["ALL"] };
+  }
   const memberships = await db.select({ studyId: schema.studyMemberships.studyId }).from(schema.studyMemberships).where(eq(schema.studyMemberships.userId, u.id));
   return { id: u.id, name: u.name, designation: u.designation, org: u.org, email: u.email, role: u.role, studies: memberships.map((m) => m.studyId) };
 }
@@ -90,6 +95,7 @@ export async function requireRole(...roles: string[]): Promise<SessionUser> {
 }
 
 export async function assertStudyAccess(user: SessionUser, studyId: string): Promise<void> {
+  if (user.studies.includes("ALL")) return;
   if (!user.studies.includes(studyId)) {
     await appendAuditDirect({ actor: user.name, role: user.role, action: "Access denied (study)", entity: "ACL", entityId: studyId, reason: "Study membership check" });
     throw new HttpError(403, `No membership for study ${studyId}`);

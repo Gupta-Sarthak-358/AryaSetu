@@ -132,7 +132,7 @@ async function boot() {
       passwordHash,
       role: p.role,
     });
-    const scope = p.studies[0] === "ALL" ? mockStudies.map((s) => s.id) : p.studies;
+    const scope = p.studies[0] === "ALL" ? ["ALL"] : p.studies;
     for (const [j, sid] of scope.entries()) {
       await db.insert(schema.studyMemberships).values({ id: `M-${userId}-${j}`, userId, studyId: sid });
     }

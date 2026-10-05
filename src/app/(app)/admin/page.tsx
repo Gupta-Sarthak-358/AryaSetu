@@ -1,4 +1,5 @@
 import { Badge, Card, CardTitle, PageHeader, StatusAuto } from "@/components/ui";
+import { DiagCard } from "@/components/DiagCard";
 import { getUsersWithStudies } from "@/lib/server/repo";
 import { KeyRound } from "lucide-react";
 
@@ -29,6 +30,11 @@ export default async function AdminPage() {
         right={<StatusAuto status="Policy version 1.4" />}
       />
 
+      <Card>
+        <CardTitle title="Deployment diagnostics" sub="Which database this deployment is actually talking to" />
+        <DiagCard />
+      </Card>
+
       <div className="grid gap-2.5 md:grid-cols-2 xl:grid-cols-4">
         {personas.map((p) => (
           <Card key={p.role} className="p-3.5">
@@ -43,7 +49,7 @@ export default async function AdminPage() {
             </div>
             <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
               <Badge>{p.role.toUpperCase()}</Badge>
-              <Badge>{p.studies.length >= 12 ? "ALL 12 STUDIES" : `${p.studies.length} STUDIES`}</Badge>
+              <Badge>{p.studies.includes("ALL") ? "ALL STUDIES" : `${p.studies.length} STUDIES`}</Badge>
             </div>
             <p className="mt-2 text-[10px] text-zinc-600">{p.org} · {p.email}</p>
           </Card>

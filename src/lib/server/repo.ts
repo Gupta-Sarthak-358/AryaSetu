@@ -150,17 +150,21 @@ export interface UserWithStudies {
 
 export async function getUsersWithStudies(): Promise<UserWithStudies[]> {
   const d = await db();
+  const { personas } = await import("../data/personas");
   const users = await d.select().from(schema.users).orderBy(schema.users.id);
   const memberships = await d.select().from(schema.studyMemberships);
-  return users.map((u) => ({
-    id: u.id,
-    name: u.name,
-    designation: u.designation,
-    org: u.org,
-    email: u.email,
-    role: u.role,
-    studies: memberships.filter((m) => m.userId === u.id).map((m) => m.studyId),
-  }));
+  return users.map((u) => {
+    const fullAccess = personas.find((p) => p.role === u.role)?.studies[0] === "ALL";
+    return {
+      id: u.id,
+      name: u.name,
+      designation: u.designation,
+      org: u.org,
+      email: u.email,
+      role: u.role,
+      studies: fullAccess ? ["ALL"] : memberships.filter((m) => m.userId === u.id).map((m) => m.studyId),
+    };
+  });
 }
 
 export async function getAuditEntries(): Promise<AuditEntry[]> {
